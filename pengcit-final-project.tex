@@ -1,0 +1,389 @@
+%%
+%% Copyright 2007, 2008, 2009 Elsevier Ltd
+%%
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%%
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%%
+%% The list of all files belonging to the 'Elsarticle Bundle' is
+%% given in the file `manifest.txt'.
+%%
+
+%% Template article for Elsevier's document class `elsarticle'
+%% with numbered style bibliographic references
+%% SP 2008/03/01
+%%
+%%
+%%
+%% $Id: elsarticle-template-num.tex 4 2009-10-24 08:22:58Z rishi $
+%%
+%%
+\documentclass[review,3p,12pt]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn]{elsarticle}
+%% \documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+
+%% if you use PostScript figures in your article
+%% use the graphics package for simple commands
+%% \usepackage{graphics}
+%% or use the graphicx package for more complicated commands
+%% \usepackage{graphicx}
+%% or use the epsfig package if you prefer to use the old commands
+%% \usepackage{epsfig}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+\usepackage{amstext}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers after \end{frontmatter}.
+%% \usepackage{lineno}
+
+%% natbib.sty is loaded by default. However, natbib options can be
+%% provided with \biboptions{...} command. Following options are
+%% valid:
+
+%%   round  -  round parentheses are used (default)
+%%   square -  square brackets are used   [option]
+%%   curly  -  curly braces are used      {option}
+%%   angle  -  angle brackets are used    <option>
+%%   semicolon  -  multiple citations separated by semi-colon
+%%   colon  - same as semicolon, an earlier confusion
+%%   comma  -  separated by comma
+%%   numbers-  selects numerical citations
+%%   super  -  numerical citations as superscripts
+%%   sort   -  sorts multiple citations according to order in ref. list
+%%   sort&compress   -  like sort, but also compresses numerical citations
+%%   compress - compresses without sorting
+%%
+%% \biboptions{comma,round}
+
+% \biboptions{}
+
+%% Other enabled packages
+%% Algorithm and Algorithmic package to write pseudocode
+\usepackage{algorithmic}
+\usepackage{algorithm}
+%% Enable highlight text
+\usepackage{color,soul}
+\sethlcolor{yellow}
+%% Include Hyphenation rules
+\include{hyphen.id}
+
+%\journal{Pattern Recognition}
+
+\begin{document}
+
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for the associated footnote;
+%% use the fnref command within \author or \address for footnotes;
+%% use the fntext command for the associated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for the associated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%%
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \address{Address\fnref{label3}}
+%% \fntext[label3]{}
+
+\title{Pengenalan Eksperesi Wajah Menggunakan Metode Local Binary Pattern dan \hl{\textit{Ensemble Extreme Learning Machine}}}
+
+%% use optional labels to link authors explicitly to addresses:
+%% \author[label1,label2]{<author name>}
+%% \address[label1]{<address>}
+%% \address[label2]{<address>}
+
+\author[csui]{I Wayan Wiprayoga Wisesa\corref{cor1}}
+\ead{i.wayan31@ui.ac.id}
+\author[csui]{Aniati Murni Arymurthy\corref{cor2}}
+\ead{aniati@cs.ui.ac.id}
+
+\cortext[cor1]{Corresponding author}
+\cortext[cor2]{Principal corresponding author}
+
+\address[csui]{Program Studi Magister Ilmu Komputer, Fakultas Ilmu Komputer, Universitas Indonesia\\
+Depok, West Java, Indonesia}
+
+\begin{abstract}
+%% Text of abstract
+Lorem ipsum dolor sit amet, aliquip molestiae sit id. Pro cu etiam propriae constituto. Persecuti cotidieque ut duo, id veritus accommodare pro. Accusam erroribus in eam, te usu porro delectus reformidans, magna oratio mucius no mei. Duo in audiam principes laboramus, in mel reque pertinacia contentiones, eos cetero luptatum postulant at. Vix everti corpora insolens in. Eu vim facer decore. Nec ei duis eloquentiam, habeo iuvaret complectitur mel te. Eu ius labores propriae, laudem equidem no sea. Veritus delicatissimi eu mel. Ut enim decore eruditi has, eam id harum convenire sententiae.
+
+\end{abstract}
+
+\begin{keyword}
+%% keywords here, in the form: keyword \sep keyword
+pengenalan ekspresi wajah, LBP, LBP-TOP, VLBP, analisis tekstur, \textit{ensemble learning}
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+
+\end{keyword}
+
+\end{frontmatter}
+
+%%
+%% Start line numbering here if you want
+%%
+% \linenumbers
+
+%% main text
+\section{Pendahuluan}
+\label{intro}
+
+Pengenalan ekspresi wajah manusia merupakan topik yang sudah lama dan cukup populer dalam bidang pengenalan pola. Ekspresi wajah yang dilakukan oleh seseorang dapat digunakan sebagai indikator yang menunjukkan tingkat emosi seseorang pada waktu tertentu. Ekman mendefinisikan 7 macam ekspresi wajah universal yang mampu mengindikasikan emosi seseorang, antara lain marah (\textit{anger}), senang (\textit{happy}), sedih (\textit{sadness}), jijik (\textit{disgust}), takut (\textit{fear}), terkejut (\textit{surprise}), dan meremehkan (\textit{contempt}) \cite{ekman1971constants}. Gambar \ref{fig:universalemot} merupakan ilustrasi dari tujuh macam ekspresi wajah manusia.
+
+\begin{figure}[hbt!]
+\caption{Tujuh ekspresi wajah universal}
+\label{fig:universalemot}
+\centering
+	\includegraphics[width=6.2in]{assets/universalemot.png}
+\end{figure}
+
+Ekspresi wajah dibentuk dari interaksi beberapa otot wajah, sehingga menghasilkan perubahan bentuk kelopak mata, alis, hidung, bibir, dan tekstur wajah \cite{fasel2003automatic}. Menurut Fasel dan Luettin, ada dua macam evaluasi pengenalan ekspresi wajah, yaitu pendekatan \textit{judgement-based} dan \textit{sign-based} \cite{fasel2003automatic}. Pendekatan \textit{judgment-based} didasarkan pada penentuan \textit{ground-truth} ekspresi wajah yang dilakukan oleh manusia juga. Oleh karena itu, pendekatan ini sangat bergantung pada reliabilitas penentuan \textit{ground-truth}. Dilain pihak, pendekatan \textit{sign-based} melakukan evaluasi terhadap gerakan dan perubahan bagian-bagian dalam wajah dan menentukan kategori ekspresinya berdasarkan sebuah kerangka kerja (\textit{framework}). Kerangka kerja ini mengandung semua kemungkinan perubahan dan gerakan bagian-bagian wajah yang mungkin terjadi pada wajah manusia. Salah satu contoh kerangka kerja yang umum dipakai adalah Facial Action Coding System (FACS) yang dikembangkan oleh Ekman dan Friesen \cite{ekman1977facial}.
+
+Sistem pengenalan ekspresi wajah dapat dimanfaatkan pada bidang Human Computer Interaction (HCI), sehingga interaksi antara manusia dengan komputer akan lebih interaktif. Masih banyak bidang-bidang lainnya yang dapat memanfaatkan sistem pengenalan ekspresi wajah ini, seperti bidang psikologi, robotika, animasi wajah sintesis, dan lain sebagainya. Ada beberapa tantangan dalam pengenalan ekspresi wajah manusia antara lain, pose wajah yang bervariasi, bentuk wajah setiap manusia yang unik, warna kulit manusia yang bervariasi, dan keambiguan ekspresi yang dibuat oleh wajah manusia. Adanya aksesoris lain seperti janggut, kumis, kacamata dan tindikan pada wajah juga menjadi tantangan tersendiri dalam mengenali ekspresi wajah manusia. \hl{Makalah ini dibuat dengan tujuan untuk mengembangkan prototipe sistem pengenalan wajah berbasiskan teknik \textit{ensemble Extreme Learning Machine}}. Varian dari metode \textit{Local Binary Pattern} akan diterapkan dalam eksperimen untuk melakukan proses ekstraksi fitur pada video. Penggunaan LBP sebagai ekstraksi fitur digunakan sebagai alternatif dari metode Gabor filter, karena kesederhanaan komputasinya. Evaluasi sistem pengenalan ekspresi wajah dilakukan dengan menggunakan pendekatan \textit{judgement-based}, yaitu dengan menggunakan data \textit{goround-truth} ekspresi wajah dari dataset yang digunakan dalam eksperimen.
+
+
+%% Section 2
+\section{Penelitian Terkait di Bidang Pengenalan Ekspresi Wajah}
+\label{related}
+
+Beberapa penelitian pada topik pengenalan ekspresi wajah telah dilakukan oleh beberapa peneliti di seluruh dunia. Fasel dan Luettin \cite{fasel2003automatic} melakukan survey komperhensif mengenai berbagai teknik yang dilakukan oleh peneliti di bidang analisis ekspresi wajah secara otomatis.
+
+Ex corpora platonem omittantur duo, pri semper efficiantur an. Adipisci constituam eam cu, graece legendos nominati ad sed, pri ea suas delicata. Purto oratio in quo, vis ocurreret forensibus at. Ut placerat definiebas est, vix no sumo epicurei electram, postea regione blandit qui at. Labitur intellegebat voluptatibus ius ea. Ex has purto solum, eum phaedrum efficiantur ut. Et nec facer soluta cetero, ad integre rationibus est.
+
+
+%% Section 3
+\section{Analisis Tekstur dengan Metode Local Binary Pattern}
+\label{lbp}
+
+Local Binary Pattern (LBP) merupakan salah satu teknik analisis tekstur pada citra. Metode ini pertama kali diperkenalkan oleh Timo Ojala et.al. \cite{ojala1996comparative}. Metode LBP dapat melakukan proses ekstraksi fitur dengan komputasi yang sederhana dan cepat. Metode LBP juga invarian terhadap transformasi iluminasi \cite{ojala2002multiresolution}. Jika kita mendefinisikan $s(x)$ sebagai fungsi yang hanya melihat tanda bilangan (positif atau negatif):
+\begin{equation}
+s(x) = \left\{
+	\begin{array}{l l}
+		1,& x \geq 0, \\
+		0,& x < 0.
+	\end{array}
+	\right.
+\end{equation}
+Maka, secara matematis, operator LBP dapat didefinisikan sebagai berikut \cite{ojala2002multiresolution}:
+\begin{equation}
+LBP_{P,R} = \sum_{p=0}^{P-1} s(g_p - g_c) 2^p
+\end{equation}
+dengan $R$ merupakan radius piksel tetangga dari titik pusat, $g_p$ merupakan nilai keabu-abuan piksel tetangga ke-$p$ ($p = 0,\dots,P-1$) dengan jarak $R$ satuan dari $g_c$ yang merupakan nilai keabu-abuan piksel pusat. Jika, koordinat dari $g_c$ adalah $(x,y)$, maka koordinat $g_p$ adalah:
+\begin{equation}
+(x-R\sin(\frac{2p\pi}{P}), y+R\cos(\frac{2p\pi}{P}))
+\end{equation}
+Koordinat piksel $g_p$ yang tidak tepat pada citra (tidak menghasilkan bilangan bulat), dapat dilakukan operasi \textit{floor} ($\lfloor {\text{val}} \rfloor$) untuk menentukan koordinat piksel. Ojala juga menambahkan bahwa, selain menggunakan operasi \textit{floor}, nilai keabu-abuan piksel dapat ditentukan dengan interpolasi \cite{ojala2002multiresolution}. Ilustrasi operator $LPB_{P,R}$ ($P=8$ dan $R=1$) dapat ditunjukkan pada Gambar \ref{fig:lbpillustr}. 
+
+\begin{figure}[hbt!]
+\caption{Ilustrasi operasi $LBP_{P,R}$ dengan $P=8$ dan $R=1$}
+\label{fig:lbpillustr}
+\centering
+	\includegraphics[width=4in]{assets/lbpillustr.png}
+\end{figure}
+
+Seiring berjalannya waktu, metode LBP cukup banyak mendapatkan perhatian dari banyak peneliti di seluruh dunia. Sampai saat ini sudah cukup banyak sekali metode ekstraksi fitur yang dikembangkan berdasarkan teknik LBP. Huang et.al. telah melakukan survey terhadap beberapa modifikasi teknik LBP dalam perjalanannya \cite{huang2011local}. Salah satu yang menarik adalah ekstensi operator LBP ke data 3-dimensi atau dapat juga diartikan sebagai data \textit{spatio-temporal}, antara lain \textit{Volume Local Binary Pattern} (VLBP) dan \textit{Local Binary Pattern Three Orthogonal Plane} (LBP-TOP).
+
+\subsection{Volume Local Binary Pattern (VLBP)}
+\label{vlbp}
+
+VLBP diperkenalkan oleh Zhao dan Pietik\"{a}inen pada tahun 2007 \cite{zhao2007dynamic}. Jika kita bandingkan dengan operator LBP dasar yang hanya melakukan analisis tekstur pada citra 2-dimensi, VLBP memiliki kemampuan tambahan yaitu dapat mengikutsertakan informasi pada domain waktu. Sehingga VLBP mampu melakukan analisis tekstur dinamis pada video atau rentetan gambar. Berikut adalah definisi VLBP secara matematis:
+\begin{equation}
+VLBP_{L,P,R} = \sum_{q=0}^{3P+1} v_q 2^p
+\end{equation}
+dengan $L$ merupakan interval waktu atau \textit{frame} perhitungan VLBP, $P$ merupakan jumlah piksel tetangga, $R$ merupakan radius piksel tetangga dari titik pusat, dan $v_q$ didefinisikan sebagai berikut:
+\begin{equation}
+\begin{array}{l l}
+v_0, v_1, \dots, v_q, \dots, v_{3P+1} = & s(g_{t_c-L,c} - g_{t_c,c}), s(g_{t_c-L,0} - g_{t_c,c}), \dots, s(g_{t_c-L,P-1} - g_{t_c,c}),\\
+& s(g_{t_c,0} - g_{t_c,c}), s(g_{t_c,1} - g_{t_c,c}), \dots, s(g_{t_c,P-1} - g_{t_c,c}),\\
+& s(g_{t_c+L,c} - g_{t_c,c}), s(g_{t_c+L,0} - g_{t_c,c}), \dots, s(g_{t_c+L,P-1} - g_{t_c,c})
+\end{array}
+\end{equation}
+dimana $g_{t_c-L,c}$ merupakan nilai keabu-abuan piksel pusat pada $L$ \textit{frame} sebelumnya, $g_{t_c+L,c}$ merupakan nilai keabu-abuan piksel pusat pada $L$ \textit{frame} selanjutnya, $g_{t_c,c}$ merupakan nilai keabu-abuan piksel pusat pada \textit{frame} sekarang, $g_{t_c \pm L,P}$ merupakan nilai keabu-abuan piksel tetangga pada $L$ frame sebelum dan sesudahnya, dan $g_{t_c,P}$ merupakan nilai keabu-abuan piksel tetangga pada frame sekarang. Gambar \ref{fig:vlbpillustr} merupakan ilustrasi operator VLBP dengan parameter $P = 4$ dan $R = 1$.
+\begin{figure}[hbt!]
+\caption{Ilustrasi operasi \textit{Volume Local Binary Pattern} (VLBP)}
+\label{fig:vlbpillustr}
+\centering
+	\includegraphics[width=5.5in]{assets/vlbpillustr.png}
+\end{figure}
+
+\subsection{Local Binary Pattern Three Orthogonal Plane (LBP-TOP)}
+\label{lbptop}
+
+Setelah kita mengetahui operator VLBP, kita dapat melihat bahwa semakin besar nilai $P$ atau jumlah tetangga yang diperhatikan akan membuat jumlah pola LBP semakin bertambah secara eksponensial, yaitu $2^{3P+2}$. Untuk mengurangi jumlah pola LBP ini Zhao dan Pietik\"{a}inen memperkenalkan teknik LBP-TOP \cite{zhao2007dynamic2}. Operator LBP-TOP didasarkan pada penggunaan metode LBP yang diterapkan pada tiga bidang yang saling orthogonal dalam video, yaitu bidang XY, YT, dan XT. Sehingga, jumlah pola LBP yang mungkin akan berkurang dari $2^{3P+2}$ menjadi $3 \times 2^P$ pola LBP (setiap bidang memiliki $2^P$ pola).
+\begin{figure}[hbt!]
+\caption{Tiga Bidang Orthogonal pada Sebuah Video \cite{zhao2007dynamic2}}
+\label{fig:top}
+\centering
+	\includegraphics[width=4in]{assets/top.png}
+\end{figure}
+
+Dari Gambar \ref{fig:top} dapat dilihat bahwa untuk menerapkan operator LBP-TOP, dilakukan proses $LBP_{P,R}$ untuk setiap bidang (XY, YT, dan XT) pada video. Karena kita melakukan operasi LBP pada 3 bidang, hal ini berimplikasi pada banyaknya jumlah piksel yang dihitung dan mengakibatkan waktu komputasi yang lebih banyak jika dibandingkan dengan operator VLBP.
+
+
+%% Section 4
+\section{Extreme Learning Machine}
+Ex corpora platonem omittantur duo, pri semper efficiantur an. Adipisci constituam eam cu, graece legendos nominati ad sed, pri ea suas delicata. Purto oratio in quo, vis ocurreret forensibus at. Ut placerat definiebas est, vix no sumo epicurei electram, postea regione blandit qui at. Labitur intellegebat voluptatibus ius ea. Ex has purto solum, eum phaedrum efficiantur ut. Et nec facer soluta cetero, ad integre rationibus est.
+
+
+%% Section 5
+\section{Garis Besar Sistem}
+\label{bigsystem}
+
+Secara garis besar, sistem pengenalan ekspresi wajah yang dikembangkan dapat dibagi dalam tiga proses. Proses yang pertama adalah \textit{preprocessing}. Setelah citra masukan dilakukan \textit{preprocessing}, citra hasil menjadi masukan untuk proses kedua. Proses yang kedua adalah ekstraksi fitur dengan menggunakan metode LBP-TOP. Kemudian pada proses ketiga, dari hasil ekstraksi fitur dilakukan klasifikasi dengan menggunakan metode \textit{ensembele learning}. Gambar \ref{fig:systemov} menunjukkan diagram alir sistem yang dikembangkan.
+
+\begin{figure}[hbt!]
+\caption{Diagram alir prototipe sistem}
+\label{fig:systemov}
+\centering
+	\includegraphics[width=6in]{assets/systemov.png}
+\end{figure}
+
+\subsection{Image Dataset}
+\label{imagedataset}
+
+Untuk melakukan training dan testing sistem, dataset \textit{extended} Cohn-Kanade (CK+) digunakan \cite{lucey2010extended}. Dataset ini merupakan perbaikan dari dataset Cohn-Kanade (CK) yang telah dipublikasikan pada tahun 2000. Dataset Cohn-Kanade telah banyak digunakan oleh peneliti untuk melakukan pengembangan dan evaluasi algoritma pengenalan ekspresi wajah individual. Pada dataset CK+, terdapat total 593 rentetan gambar pose wajah dari 123 narasumber dengan umur berkisar antara 18 hingga 50 tahun. Komposisi narasumber adalah 69\% wanita, 81\% Euro-American, 13\% Afro-American, dan 6\% grup lainnya. Jumlah rentetan gambar bervariasi mulai dari 10 hingga 60 \textit{frame} dan kesemuanya selalu diawali oleh ekspresi netral hingga pada akhirnya informasi puncak ekspresi wajah. Keseluruhan tipe warna rentetan gambar adalah 8-bit \textit{gray-scale} dan 24-bit warna dengan ukuran 640x490 atau 640x480 piksel. Gambar \ref{fig:ckplusexampl} menunjukkan contoh beberapa sampel rentetan gambar yang diambil dari dataset CK+.
+
+\begin{figure}[b!]
+\caption{Contoh dataset extended Cohn-Kanade}
+\label{fig:ckplusexampl}
+\centering
+	\includegraphics[width=6.2in]{assets/ckplusexampl.png}
+\end{figure}
+
+Dataset CK+ juga sudah memiliki \textit{ground truth} yang lebih baik untuk pengenalan jenis ekspresi berdasarkan 7 kelas ekspresi wajah universal. Dalam dataset distribusinya, struktur direktori dan \textit{file} setiap gambar memiliki konvensi tertentu. Sebagai contoh, sebuah file gambar dengan alamat \texttt{cohn-kanade-images/S005/001/S005\_001\_011.png} memiliki asosiasi dengan file jenis ekspresi pada \texttt{Emotion/S005/001/S005\_001\_011\_emotion.txt}. File jenis ekspresi memiliki variasi nilai mulai dari 0 sampai 7 (0=netral, 1=\textit{anger}, 2=\textit{contempt}, 3=\textit{disgust}, 4=\textit{fear}, 5=\textit{happy}, 6=\textit{sadness}, 7=\textit{surprise}). Dari total 593 rentetan gambar, 327 diantaranya memiliki \textit{ground truth} untuk jenis ekpresi wajah.
+
+\begin{enumerate}
+\item Exerci reformidans nam no, has et error impedit omittantur
+\item Ei hinc senserit qui. Ea qui duis justo primis, vide consul eam id, odio justo detraxit no eos
+\end{enumerate}
+
+Exerci reformidans nam no, has et error impedit omittantur. Ei hinc senserit qui. Ea qui duis justo primis, vide consul eam id, odio justo detraxit no eos. Fastidii gloriatur vis id. Pri noster reprimique vituperatoribus ea, vis ut altera gloriatur. Viderer omittam indoctum in pro.
+
+\subsection{Preprocessing}
+\label{preprocessing}
+
+Maiorum tractatos argumentum ne per, sumo ludus maluisset eu eum, mea an periculis contentiones. Partiendo salutandi eloquentiam ad cum, ea munere populo eam, justo laudem at vel. Labore quidam tractatos ius ad, eu mel consul possit, pro ex diam elit viderer. Cu saperet officiis per, te alia labore rationibus vel, cu qui idque vocent nonumes. Pro admodum accommodare definitiones ex. Labitur dissentiunt ea mel.
+
+\begin{algorithm}[hbt!]
+\begin{algorithmic}[1]
+\REQUIRE{Face Expression Image}
+\ENSURE{Fitur LBP-TOP}
+\STATE Detect Face
+\IF{Face detected = 1} 
+	\STATE Create Bounding Box 
+\ELSE 
+	\STATE Do something... 
+\ENDIF
+\end{algorithmic}
+\caption{Algoritma \textit{Preprocessing} dan Ekstraksi Fitur}
+\label{alg:test}
+\end{algorithm}
+
+\subsection{Feature Extraction}
+
+Legere maiorum referrentur id cum, elit partiendo ex quo. Te erat vivendo maluisset sea. Stet lorem placerat te sea, sale ancillae iracundia te cum, ad impetus hendrerit definiebas nam. Choro consetetur cu mei, ius ad enim eius mentitum, usu illud sanctus in.
+
+\subsection{Classification}
+
+Possit admodum adipiscing ut qui, ei erat indoctum theophrastus eos. Ex putant euismod fabellas usu, nusquam volumus euripidis an ius, et aperiam signiferumque vis. Erat forensibus moderatius ne mei, vix an labores definitiones. His esse ullum scribentur ne, sea at meliore inimicus instructior, cum an vidit lucilius. Fierent ponderum mea ex, in wisi vituperatoribus duo.
+
+
+%% Section 6
+\section{Eksperimen dan Analisis}
+\label{experiment}
+
+Minim dolorem convenire sit ne, veniam everti labores mel ut, vim aperiam laboramus id. Lorem tractatos sed ea. Mucius verterem te qui, sed malorum maiestatis dissentias ei. Probo paulo doming ne vix, ius oratio sententiae in. In quem vero velit vis, mea accusata scribentur vituperatoribus ei. Aperiam mnesarchum nec at, vel ea aliquip ornatus. Mea efficiendi definitionem et, tritani erroribus sit et.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Experimental conditions}
+  \label{tab:expcond}
+  \begin{tabular}{ccc}
+    \hline
+    1 & 2 & 3 \\
+    \hline
+    4 & 5 & 6 \\
+    7 & 8 & 9 \\
+    1 & 2 & 3
+\end{tabular}
+\end{table}
+
+
+%% Section 7
+\section{Kesimpulan}
+\label{conclusion}
+
+Et vix choro semper. His elit aliquid no. Vix option noluisse ocurreret ei, ad quem nibh alterum mel. Nonumy aliquid copiosae ea per, eruditi repudiare quo at. Atqui adipisci posidonium eu eum.
+
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as normal sections
+%% \appendix
+
+%% \section{}
+%% \label{}
+
+%% References
+%%
+%% Following citation commands can be used in the body text:
+%% Usage of \cite is as follows:
+%%   \cite{key}         ==>>  [#]
+%%   \cite[chap. 2]{key} ==>> [#, chap. 2]
+%%
+
+%% References with bibTeX database:
+
+\bibliographystyle{elsarticle-num}
+\bibliography{bibliograph}
+
+%% Authors are advised to submit their bibtex database files. They are
+%% requested to list a bibtex style file in the manuscript if they do
+%% not want to use elsarticle-num.bst.
+
+%% References without bibTeX database:
+
+% \begin{thebibliography}{00}
+
+%% \bibitem must have the following form:
+%%   \bibitem{key}...
+%%
+
+% \bibitem{}
+
+% \end{thebibliography}
+
+
+\end{document}
+
+%%
+%% End of file `elsarticle-template-num.tex'.
