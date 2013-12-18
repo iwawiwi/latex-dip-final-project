@@ -177,7 +177,20 @@ Sistem pengenalan ekspresi wajah dapat dimanfaatkan pada bidang Human Computer I
 \section{Penelitian Terkait di Bidang Pengenalan Ekspresi Wajah}
 \label{related}
 
-Beberapa penelitian pada topik pengenalan ekspresi wajah telah dilakukan oleh beberapa peneliti di seluruh dunia. Fasel dan Luettin \cite{fasel2003automatic} melakukan survey komperhensif mengenai berbagai teknik yang dilakukan oleh peneliti di bidang analisis ekspresi wajah secara otomatis.
+Beberapa penelitian pada topik pengenalan ekspresi wajah telah dilakukan oleh beberapa peneliti di seluruh dunia. Fasel dan Luettin \cite{fasel2003automatic} melakukan survey komperhensif mengenai berbagai teknik yang dilakukan oleh peneliti di bidang analisis ekspresi wajah secara otomatis. Berdasarkan karyanya, Fasel dan Luettin memaparkan kerangka kerja umum sebuah sistem pengenalan ekspresi wajah. Gambar \ref{fig:exprframework} menunjukkan sistem pengenalan ekspresi wajah dibagi dalam 3 tahap besar, yaitu: akuisisi data, ekstraksi fitur, dan klasifikasi fitur.
+
+\begin{figure}[hbt!]
+\caption{Kerangka kerja umum sistem pengenalan ekspresi wajah \cite{fasel2003automatic}}
+\label{fig:exprframework}
+\centering
+\includegraphics[width=6in]{assets/exprframework.png}
+\end{figure}
+
+Penggunaan operator Local Buinary Pattern (LBP) dalam melakukan pengenalan ekspresi wajah juga sudah banyak diterapkan oleh para peneliti. Penelitian oleh Ahonen et.al. menggunakan teknik \textit{spatially enhanced histogram} \cite{ahonen2006face} dalam membangun sebuah deskriptor yang mampu merepresentasikan wajah seseorang. Teknik \textit{spatially enhanced histogram} ini dilakukan dengan cara membagi-bagi area pada citra menjadi beberapa wilayah. Setiap wilayah pada citra kemudian dihitung histogram LBP-nya dan pada akhirnya histogram LBP untuk setiap wilayah digabung menjadi fitur citra secara global. Dalam penelitiannya, teknik LBP menghasilkan performa yang cukup menjanjikan sebagai deksriptor citra wajah. 
+
+Dalam penelitiannya, Shan et.al. \cite{shan2009facial} memanfaatkan teknik \textit{spatially enhanced histogram} dalam membangun sistem pengenalan ekspresi wajah dengan menggunakan SVM sebagai \textit{classifier}-nya. Hasil penelitiannya menunjukkan bahwa, penggunaan SVM dengan menggunakan kernel RBF memiliki tingkat pengenalan ekspresi yang lebih baik jika dibandingkan dengan menggunakan Gabor filter. Untuk menunjukkan bahwa LBP mampu diandalkan sebagai deskriptor citra wajah, beberapa eksperimen dengan skenario lainnya juga dilakukan dalam penelitian yang dilakukan oleh Shan et.al. \cite{shan2009facial}. Pengujian pada data dengan resolusi rendah menunjukkan bahwa LBP masih sedikit lebih baik jika dibandingkan dengan fitur Gabor untuk mengenali ekspresi wajah. Untuk mengurangi banyaknya fitur yang dihasilkan oleh teknik spatially enhanced histogram, pada eksperimen lainnya diterapkan metode seleksi fitur mengunakan AdaBoost. Metode seleksi fitur AdaBoost digunakan untuk mempelajari seluruh histogram LBP yang efektif dalam merepresentasikan citra, sehingga nantinya akan diambil sejumlah fitur yang memiliki kontribusi yang signifikan.
+
+Pendekatan penggunaan LBP yang cukup unik dilakuan oleh Moore dan Bowden \cite{moore2011local} dalam melakukan pengenalan ekspresi wajah dari kasus citra wajah dengan sudut pandang kamera yang bervariasi (tidak hanya dari depan saja).
 
 Ex corpora platonem omittantur duo, pri semper efficiantur an. Adipisci constituam eam cu, graece legendos nominati ad sed, pri ea suas delicata. Purto oratio in quo, vis ocurreret forensibus at. Ut placerat definiebas est, vix no sumo epicurei electram, postea regione blandit qui at. Labitur intellegebat voluptatibus ius ea. Ex has purto solum, eum phaedrum efficiantur ut. Et nec facer soluta cetero, ad integre rationibus est.
 
@@ -242,7 +255,7 @@ dimana $g_{t_c-L,c}$ merupakan nilai keabu-abuan piksel pusat pada $L$ \textit{f
 
 Setelah kita mengetahui operator VLBP, kita dapat melihat bahwa semakin besar nilai $P$ atau jumlah tetangga yang diperhatikan akan membuat jumlah pola LBP semakin bertambah secara eksponensial, yaitu $2^{3P+2}$. Untuk mengurangi jumlah pola LBP ini Zhao dan Pietik\"{a}inen memperkenalkan teknik LBP-TOP \cite{zhao2007dynamic2}. Operator LBP-TOP didasarkan pada penggunaan metode LBP yang diterapkan pada tiga bidang yang saling orthogonal dalam video, yaitu bidang XY, YT, dan XT. Sehingga, jumlah pola LBP yang mungkin akan berkurang dari $2^{3P+2}$ menjadi $3 \times 2^P$ pola LBP (setiap bidang memiliki $2^P$ pola).
 \begin{figure}[hbt!]
-\caption{Tiga Bidang Orthogonal pada Sebuah Video \cite{zhao2007dynamic2}}
+\caption{Tiga bidang orthogonal pada sebuah video \cite{zhao2007dynamic2}}
 \label{fig:top}
 \centering
 	\includegraphics[width=4in]{assets/top.png}
@@ -266,13 +279,13 @@ Secara garis besar, sistem pengenalan ekspresi wajah yang dikembangkan dapat dib
 \caption{Diagram alir prototipe sistem}
 \label{fig:systemov}
 \centering
-	\includegraphics[width=6in]{assets/systemov.png}
+	\includegraphics[width=6.3in]{assets/systemov.png}
 \end{figure}
 
 \subsection{Image Dataset}
 \label{imagedataset}
 
-Untuk melakukan training dan testing sistem, dataset \textit{extended} Cohn-Kanade (CK+) digunakan \cite{lucey2010extended}. Dataset ini merupakan perbaikan dari dataset Cohn-Kanade (CK) yang telah dipublikasikan pada tahun 2000. Dataset Cohn-Kanade telah banyak digunakan oleh peneliti untuk melakukan pengembangan dan evaluasi algoritma pengenalan ekspresi wajah individual. Pada dataset CK+, terdapat total 593 rentetan gambar pose wajah dari 123 narasumber dengan umur berkisar antara 18 hingga 50 tahun. Komposisi narasumber adalah 69\% wanita, 81\% Euro-American, 13\% Afro-American, dan 6\% grup lainnya. Jumlah rentetan gambar bervariasi mulai dari 10 hingga 60 \textit{frame} dan kesemuanya selalu diawali oleh ekspresi netral hingga pada akhirnya informasi puncak ekspresi wajah. Keseluruhan tipe warna rentetan gambar adalah 8-bit \textit{gray-scale} dan 24-bit warna dengan ukuran 640x490 atau 640x480 piksel. Gambar \ref{fig:ckplusexampl} menunjukkan contoh beberapa sampel rentetan gambar yang diambil dari dataset CK+.
+Untuk melakukan proses \textit{training} dan \textit{testing} sistem, dataset \textit{extended} Cohn-Kanade (CK+) digunakan \cite{lucey2010extended}. Dataset ini merupakan perbaikan dari dataset Cohn-Kanade (CK) yang telah dipublikasikan pada tahun 2000. Dataset Cohn-Kanade telah banyak digunakan oleh peneliti untuk melakukan pengembangan dan evaluasi algoritma pengenalan ekspresi wajah individual. Pada dataset CK+, terdapat total 593 rentetan gambar pose wajah dari 123 narasumber dengan umur berkisar antara 18 hingga 50 tahun. Komposisi narasumber adalah 69\% wanita, 81\% Euro-American, 13\% Afro-American, dan 6\% grup lainnya. Jumlah rentetan gambar bervariasi mulai dari 10 hingga 60 \textit{frame} dan kesemuanya selalu diawali oleh ekspresi netral hingga pada akhirnya informasi puncak ekspresi wajah. Keseluruhan tipe warna rentetan gambar adalah 8-bit \textit{gray-scale} dan 24-bit warna dengan ukuran 640x490 atau 640x480 piksel. Gambar \ref{fig:ckplusexampl} menunjukkan contoh beberapa sampel rentetan gambar yang diambil dari dataset CK+.
 
 \begin{figure}[b!]
 \caption{Contoh dataset extended Cohn-Kanade}
