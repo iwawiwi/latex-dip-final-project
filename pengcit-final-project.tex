@@ -24,7 +24,7 @@
 %% $Id: elsarticle-template-num.tex 4 2009-10-24 08:22:58Z rishi $
 %%
 %%
-\documentclass[review,3p,12pt]{elsarticle}
+\documentclass[review,3p,12pt,times]{elsarticle}
 
 %% Use the option review to obtain double line spacing
 %% \documentclass[preprint,review,12pt]{elsarticle}
@@ -85,10 +85,33 @@
 %% Enable highlight text
 \usepackage{color,soul}
 \sethlcolor{yellow}
+%% Custom spacing environement
+\usepackage{setspace}
+%% URL package
+\usepackage{url}
+%% Tabularx package
+\usepackage{multirow}
+\usepackage{booktabs}
+%% Subcaption environment
+\usepackage{subcaption}
+%% Array package
+\usepackage{array}
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 %% Include Hyphenation rules
 \include{hyphen.id}
 
-%\journal{Pattern Recognition}
+\journal{N/A}
+
+%% Renew Command
+\renewcommand{\figurename}{Gambar}
+\renewcommand{\tablename}{Tabel}
+\renewcommand{\refname}{Referensi}
+%\addto{\captionsenglish}{\renewcommand{\abstractname}{Abstrak}}
+\renewcommand{\abstractname}{Abstrak}
+\makeatletter
+\renewcommand{\ALG@name}{Algoritma}
 
 \begin{document}
 
@@ -115,7 +138,7 @@
 %% \address{Address\fnref{label3}}
 %% \fntext[label3]{}
 
-\title{Pengenalan Eksperesi Wajah Menggunakan Metode Local Binary Pattern dan \hl{\textit{Ensemble Extreme Learning Machine}}}
+\title{Pengenalan Ekspresi Wajah dalam Video Menggunakan Metode 3-D \textit{Local Binary Pattern} dan \textit{Random Forest}}
 
 %% use optional labels to link authors explicitly to addresses:
 %% \author[label1,label2]{<author name>}
@@ -135,13 +158,14 @@ Depok, West Java, Indonesia}
 
 \begin{abstract}
 %% Text of abstract
-Lorem ipsum dolor sit amet, aliquip molestiae sit id. Pro cu etiam propriae constituto. Persecuti cotidieque ut duo, id veritus accommodare pro. Accusam erroribus in eam, te usu porro delectus reformidans, magna oratio mucius no mei. Duo in audiam principes laboramus, in mel reque pertinacia contentiones, eos cetero luptatum postulant at. Vix everti corpora insolens in. Eu vim facer decore. Nec ei duis eloquentiam, habeo iuvaret complectitur mel te. Eu ius labores propriae, laudem equidem no sea. Veritus delicatissimi eu mel. Ut enim decore eruditi has, eam id harum convenire sententiae.
+%\hl{Lorem ipsum dolor sit amet, aliquip molestiae sit id. Pro cu etiam propriae constituto. Persecuti cotidieque ut duo, id veritus accommodare pro. Accusam erroribus in eam, te usu porro delectus reformidans, magna oratio mucius no mei. Duo in audiam principes laboramus, in mel reque pertinacia contentiones, eos cetero luptatum postulant at. Vix everti corpora insolens in. Eu vim facer decore. Nec ei duis eloquentiam, habeo iuvaret complectitur mel te. Eu ius labores propriae, laudem equidem no sea. Veritus delicatissimi eu mel. Ut enim decore eruditi has, eam id harum convenire sententiae.}
+Pengenalan ekspresi wajah dalam video telah dilakukan dalam eksperimen. Pendekatan \textit{judgement based} dilakukan dalam evaluasi hasil pengenalan ekspresi berdasarkan \textit{ground truth} label ekspresi. Penelitian yang dilakukan menggunakan dataset \textit{extended}-CK (CK+) sebagai data latihan dan tes. Ekstraksi fitur tekstur dengan menggunakan metode 3-D \textit{Local Binary Pattern} (yaitu VLBP dan LBP-TOP) diterapkan pada segmen wajah dalam setiap \textit{frame} video. Klasifikasi dilakukan dengan menggunakan algoritma \textit{random forest} dan dibantu dengan aplikasi WEKA. Beberapa skenario eksperimen dilakukan, salah satunya untuk mengatasi masalah ketidaksetaraan jumlah data (\textit{imbalanced data}) masing-masing kelas ekspresi. Metode \textit{resampling} digunakan untuk mengatasi masalah ini dengan membuat distribusi jumlah data masing-masing label menjadi seimbang. Hasil yang cukup baik, yaitu hingga mencapai 76.15\% dihasilkan dalam eksperimen.
 
 \end{abstract}
 
 \begin{keyword}
 %% keywords here, in the form: keyword \sep keyword
-pengenalan ekspresi wajah, LBP, LBP-TOP, VLBP, analisis tekstur, \textit{ensemble learning}
+pengenalan ekspresi wajah, 3D-LBP, LBP-TOP, VLBP, analisis tekstur, \textit{imbalanced data}, \textit{resampling}, \textit{random forest}
 
 %% MSC codes here, in the form: \MSC code \sep code
 %% or \MSC[2008] code \sep code (2000 is the default)
@@ -159,47 +183,51 @@ pengenalan ekspresi wajah, LBP, LBP-TOP, VLBP, analisis tekstur, \textit{ensembl
 \section{Pendahuluan}
 \label{intro}
 
-Pengenalan ekspresi wajah manusia merupakan topik yang sudah lama dan cukup populer dalam bidang pengenalan pola. Ekspresi wajah yang dilakukan oleh seseorang dapat digunakan sebagai indikator yang menunjukkan tingkat emosi seseorang pada waktu tertentu. Ekman mendefinisikan 7 macam ekspresi wajah universal yang mampu mengindikasikan emosi seseorang, antara lain marah (\textit{anger}), senang (\textit{happy}), sedih (\textit{sadness}), jijik (\textit{disgust}), takut (\textit{fear}), terkejut (\textit{surprise}), dan meremehkan (\textit{contempt}) \cite{ekman1971constants}. Gambar \ref{fig:universalemot} merupakan ilustrasi dari tujuh macam ekspresi wajah manusia.
+Pengenalan ekspresi wajah manusia merupakan topik yang sudah lama dan cukup populer dalam bidang pengenalan pola. Ekspresi wajah yang dilakukan oleh seseorang dapat digunakan sebagai indikator yang menunjukkan tingkat emosi seseorang pada waktu tertentu. Ekman dan Friesen mendefinisikan 7 macam ekspresi wajah universal yang mampu mengindikasikan emosi seseorang, antara lain marah (\textit{anger}), senang (\textit{happy}), sedih (\textit{sadness}), jijik (\textit{disgust}), takut (\textit{fear}), terkejut (\textit{surprise}), dan meremehkan (\textit{contempt}) \cite{ekman1971constants}. Gambar \ref{fig:universalemot} merupakan ilustrasi dari tujuh macam ekspresi wajah manusia.
 
 \begin{figure}[hbt!]
 \caption{Tujuh ekspresi wajah universal}
 \label{fig:universalemot}
 \centering
 	\includegraphics[width=6.2in]{assets/universalemot.png}
+	
 \end{figure}
 
-Ekspresi wajah dibentuk dari interaksi beberapa otot wajah, sehingga menghasilkan perubahan bentuk kelopak mata, alis, hidung, bibir, dan tekstur wajah \cite{fasel2003automatic}. Menurut Fasel dan Luettin, ada dua macam evaluasi pengenalan ekspresi wajah, yaitu pendekatan \textit{judgement-based} dan \textit{sign-based} \cite{fasel2003automatic}. Pendekatan \textit{judgment-based} didasarkan pada penentuan \textit{ground-truth} ekspresi wajah yang dilakukan oleh manusia juga. Oleh karena itu, pendekatan ini sangat bergantung pada reliabilitas penentuan \textit{ground-truth}. Dilain pihak, pendekatan \textit{sign-based} melakukan evaluasi terhadap gerakan dan perubahan bagian-bagian dalam wajah dan menentukan kategori ekspresinya berdasarkan sebuah kerangka kerja (\textit{framework}). Kerangka kerja ini mengandung semua kemungkinan perubahan dan gerakan bagian-bagian wajah yang mungkin terjadi pada wajah manusia. Salah satu contoh kerangka kerja yang umum dipakai adalah Facial Action Coding System (FACS) yang dikembangkan oleh Ekman dan Friesen \cite{ekman1977facial}.
+Ekspresi wajah dibentuk dari interaksi beberapa otot wajah, sehingga menghasilkan perubahan bentuk kelopak mata, alis, hidung, bibir, dan tekstur wajah \cite{fasel2003automatic}. Menurut Fasel dan Luettin, ada dua macam evaluasi pengenalan ekspresi wajah, yaitu pendekatan \textit{judgement-based} dan \textit{sign-based} \cite{fasel2003automatic}. Pendekatan \textit{judgment-based} didasarkan pada penentuan \textit{ground-truth} ekspresi wajah yang dilakukan oleh manusia juga. Oleh karena itu, pendekatan ini sangat bergantung pada reliabilitas penentuan \textit{ground-truth}. Dilain pihak, pendekatan \textit{sign-based} melakukan evaluasi terhadap gerakan dan perubahan bagian-bagian dalam wajah dan menentukan kategori ekspresinya berdasarkan sebuah kerangka kerja (\textit{framework}). Kerangka kerja ini mengandung semua kemungkinan perubahan dan gerakan bagian-bagian wajah yang mungkin terjadi pada wajah manusia. Salah satu contoh kerangka kerja yang umum dipakai adalah \textit{Facial Action Coding System} (FACS) yang dikembangkan oleh Ekman dan Friesen \cite{ekman1977facial}.
 
-Sistem pengenalan ekspresi wajah dapat dimanfaatkan pada bidang Human Computer Interaction (HCI), sehingga interaksi antara manusia dengan komputer akan lebih interaktif. Masih banyak bidang-bidang lainnya yang dapat memanfaatkan sistem pengenalan ekspresi wajah ini, seperti bidang psikologi, robotika, animasi wajah sintesis, dan lain sebagainya. Ada beberapa tantangan dalam pengenalan ekspresi wajah manusia antara lain, pose wajah yang bervariasi, bentuk wajah setiap manusia yang unik, warna kulit manusia yang bervariasi, dan keambiguan ekspresi yang dibuat oleh wajah manusia. Adanya aksesoris lain seperti janggut, kumis, kacamata dan tindikan pada wajah juga menjadi tantangan tersendiri dalam mengenali ekspresi wajah manusia. \hl{Makalah ini dibuat dengan tujuan untuk mengembangkan prototipe sistem pengenalan wajah berbasiskan teknik \textit{ensemble Extreme Learning Machine}}. Varian dari metode \textit{Local Binary Pattern} akan diterapkan dalam eksperimen untuk melakukan proses ekstraksi fitur pada video. Penggunaan LBP sebagai ekstraksi fitur digunakan sebagai alternatif dari metode Gabor filter, karena kesederhanaan komputasinya. Evaluasi sistem pengenalan ekspresi wajah dilakukan dengan menggunakan pendekatan \textit{judgement-based}, yaitu dengan menggunakan data \textit{goround-truth} ekspresi wajah dari dataset yang digunakan dalam eksperimen.
+Sistem pengenalan ekspresi wajah dapat dimanfaatkan pada bidang \textit{Human Computer Interaction} (HCI), sehingga interaksi antara manusia dengan komputer akan lebih interaktif. Masih banyak bidang-bidang lainnya yang dapat memanfaatkan sistem pengenalan ekspresi wajah ini, seperti bidang psikologi, robotika, animasi wajah sintesis, dan lain sebagainya. Ada beberapa tantangan dalam pengenalan ekspresi wajah manusia antara lain, pose wajah yang bervariasi, bentuk wajah setiap manusia yang unik, warna kulit manusia yang bervariasi, dan keambiguan ekspresi yang dibuat oleh wajah manusia. Adanya aksesori lain seperti janggut, kumis, kacamata dan tindikan pada wajah juga menjadi tantangan tersendiri dalam mengenali ekspresi wajah manusia. Makalah ini dibuat dengan tujuan untuk mengembangkan prototipe sistem pengenalan wajah pada video berbasiskan teknik 3-D \textit{Local Binary Pattern}. Varian dari metode 3-D \textit{Local Binary Pattern} akan diterapkan dalam eksperimen untuk melakukan proses ekstraksi fitur pada video. Penggunaan metode LBP sebagai teknik ekstraksi fitur adalah sebagai alternatif dari metode Gabor filter dengan pertimbangan kesederhanaan komputasinya. Evaluasi sistem pengenalan ekspresi wajah dilakukan dengan menggunakan pendekatan \textit{judgement-based}, yaitu dengan menggunakan data \textit{goround-truth} ekspresi wajah dari dataset yang digunakan dalam eksperimen.
 
 
 %% Section 2
 \section{Penelitian Terkait di Bidang Pengenalan Ekspresi Wajah}
 \label{related}
 
-Beberapa penelitian pada topik pengenalan ekspresi wajah telah dilakukan oleh beberapa peneliti di seluruh dunia. Fasel dan Luettin \cite{fasel2003automatic} melakukan survey komperhensif mengenai berbagai teknik yang dilakukan oleh peneliti di bidang analisis ekspresi wajah secara otomatis. Berdasarkan karyanya, Fasel dan Luettin memaparkan kerangka kerja umum sebuah sistem pengenalan ekspresi wajah. Gambar \ref{fig:exprframework} menunjukkan sistem pengenalan ekspresi wajah dibagi dalam 3 tahap besar, yaitu: akuisisi data, ekstraksi fitur, dan klasifikasi fitur.
+Beberapa penelitian pada topik pengenalan ekspresi wajah telah dilakukan oleh beberapa peneliti di seluruh dunia. Fasel dan Luettin \cite{fasel2003automatic} melakukan survei komprehensif mengenai berbagai teknik yang dilakukan oleh peneliti di bidang analisis ekspresi wajah secara otomatis. Berdasarkan karyanya, Fasel dan Luettin memaparkan kerangka kerja umum sebuah sistem pengenalan ekspresi wajah. Gambar \ref{fig:exprframework} menunjukkan sistem pengenalan ekspresi wajah dibagi dalam 3 tahap besar, yaitu: akuisisi data, ekstraksi fitur, dan klasifikasi fitur.
 
 \begin{figure}[hbt!]
 \caption{Kerangka kerja umum sistem pengenalan ekspresi wajah \cite{fasel2003automatic}}
 \label{fig:exprframework}
 \centering
 \includegraphics[width=6in]{assets/exprframework.png}
+
 \end{figure}
 
-Penggunaan operator Local Buinary Pattern (LBP) dalam melakukan pengenalan ekspresi wajah juga sudah banyak diterapkan oleh para peneliti. Penelitian oleh Ahonen et.al. menggunakan teknik \textit{spatially enhanced histogram} \cite{ahonen2006face} dalam membangun sebuah deskriptor yang mampu merepresentasikan wajah seseorang. Teknik \textit{spatially enhanced histogram} ini dilakukan dengan cara membagi-bagi area pada citra menjadi beberapa wilayah. Setiap wilayah pada citra kemudian dihitung histogram LBP-nya dan pada akhirnya histogram LBP untuk setiap wilayah digabung menjadi fitur citra secara global. Dalam penelitiannya, teknik LBP menghasilkan performa yang cukup menjanjikan sebagai deksriptor citra wajah. 
+Penggunaan operator \textit{Local Buinary Pattern} (LBP) dalam melakukan pengenalan ekspresi wajah juga sudah banyak diterapkan oleh para peneliti. Penelitian oleh Ahonen et.al. menggunakan teknik \textit{spatially enhanced histogram} \cite{ahonen2006face} dalam membangun sebuah deskriptor yang mampu merepresentasikan wajah seseorang. Teknik \textit{spatially enhanced histogram} ini dilakukan dengan cara membagi-bagi area pada citra menjadi beberapa wilayah. Setiap wilayah pada citra kemudian dihitung histogram LBP-nya dan pada akhirnya histogram LBP untuk setiap wilayah digabung menjadi fitur citra secara global. Dalam penelitiannya, teknik LBP menghasilkan performa yang cukup menjanjikan sebagai deksriptor citra wajah. 
 
-Dalam penelitiannya, Shan et.al. \cite{shan2009facial} memanfaatkan teknik \textit{spatially enhanced histogram} dalam membangun sistem pengenalan ekspresi wajah dengan menggunakan SVM sebagai \textit{classifier}-nya. Hasil penelitiannya menunjukkan bahwa, penggunaan SVM dengan menggunakan kernel RBF memiliki tingkat pengenalan ekspresi yang lebih baik jika dibandingkan dengan menggunakan Gabor filter. Untuk menunjukkan bahwa LBP mampu diandalkan sebagai deskriptor citra wajah, beberapa eksperimen dengan skenario lainnya juga dilakukan dalam penelitian yang dilakukan oleh Shan et.al. \cite{shan2009facial}. Pengujian pada data dengan resolusi rendah menunjukkan bahwa LBP masih sedikit lebih baik jika dibandingkan dengan fitur Gabor untuk mengenali ekspresi wajah. Untuk mengurangi banyaknya fitur yang dihasilkan oleh teknik spatially enhanced histogram, pada eksperimen lainnya diterapkan metode seleksi fitur mengunakan AdaBoost. Metode seleksi fitur AdaBoost digunakan untuk mempelajari seluruh histogram LBP yang efektif dalam merepresentasikan citra, sehingga nantinya akan diambil sejumlah fitur yang memiliki kontribusi yang signifikan.
+Dalam penelitiannya, Shan et.al. \cite{shan2009facial} memanfaatkan teknik \textit{spatially enhanced histogram} dalam membangun sistem pengenalan ekspresi wajah dengan menggunakan SVM sebagai \textit{classifier}-nya. Hasil penelitiannya menunjukkan bahwa, penggunaan SVM dengan menggunakan kernel RBF memiliki tingkat pengenalan ekspresi yang lebih baik jika dibandingkan dengan menggunakan Gabor filter. Untuk menunjukkan bahwa LBP mampu diandalkan sebagai deskriptor citra wajah, beberapa eksperimen dengan skenario lainnya juga dilakukan dalam penelitian yang dilakukan oleh Shan et.al. \cite{shan2009facial}. Pengujian pada data dengan resolusi rendah menunjukkan bahwa LBP masih sedikit lebih baik jika dibandingkan dengan fitur Gabor untuk mengenali ekspresi wajah. Untuk mengurangi banyaknya fitur yang dihasilkan oleh teknik \textit{spatially enhanced histogram}, pada eksperimen lainnya diterapkan metode seleksi fitur mengunakan AdaBoost. Metode seleksi fitur AdaBoost digunakan untuk mempelajari seluruh histogram LBP yang efektif dalam merepresentasikan citra, sehingga nantinya akan diambil sejumlah fitur yang memiliki kontribusi yang signifikan.
 
-Pendekatan penggunaan LBP yang cukup unik dilakuan oleh Moore dan Bowden \cite{moore2011local} dalam melakukan pengenalan ekspresi wajah dari kasus citra wajah dengan sudut pandang kamera yang bervariasi (tidak hanya dari depan saja).
+Pendekatan penggunaan LBP yang cukup unik dilakukan oleh Moore dan Bowden \cite{moore2011local} dalam melakukan pengenalan ekspresi wajah dari kasus citra wajah dengan sudut pandang kamera yang bervariasi (tidak hanya dari depan saja). Eksperimen dilakukan dengan menggunakan 2 macam dataset yang berbeda yaitu BU3DFE dan multi-pie dataset. Dalam penelitian yang dilakukannya, metode \textit{Local Gabor Binary Pattern} (LGBP) mampu menghasilkan tingkat akurasi klasifikasi yang terbaik. Metode LGBP merupakan gabungan teknik LBP dan Gabor filter. Pertama-tama, diterapkan proses filter menggunakan Gabor \textit{wavelet} pada citra. Lima skala dan delapan orientasi digunakan sehingga dihasilkan 40 filter yang masing-masing akan menghasilkan luaran citra hasil filter. Kemudian, setiap citra hasil ekstraksi Gabor filter dibagi menjadi 64 ($8\times8$) bagian yang ukurannya sama. Operator $LBP^{u2}$ \cite{ojala2002multiresolution} kemudian diterapkan pada setiap 64 bagian masing-masing citra hasil filter Gabor \textit{wavelet} dan histogram LBP yang dihasilkan digabung. Sebagai implikasinya, dimensi fitur metode LGBP cukup besar, yaitu mencapai 151.040.
 
-Ex corpora platonem omittantur duo, pri semper efficiantur an. Adipisci constituam eam cu, graece legendos nominati ad sed, pri ea suas delicata. Purto oratio in quo, vis ocurreret forensibus at. Ut placerat definiebas est, vix no sumo epicurei electram, postea regione blandit qui at. Labitur intellegebat voluptatibus ius ea. Ex has purto solum, eum phaedrum efficiantur ut. Et nec facer soluta cetero, ad integre rationibus est.
+Berdasarkan beberapa studi literatur mengenai pengenalan ekspresi wajah di atas, kebanyakan penelitian yang dilakukan terbatas pada citra statis saja. Masih belum banyak yang melakukan penelitian pengenalan ekspresi wajah dari data video. Oleh karena itu, makalah ini juga bertujuan untuk menguji ketangguhan metode \textit{Local Binary Pattern} dalam mengenali ekspresi wajah dari data video atau rentetan gambar (\textit{image sequence}).
+
+%Ex corpora platonem omittantur duo, pri semper efficiantur an. Adipisci constituam eam cu, graece legendos nominati ad sed, pri ea suas delicata. Purto oratio in quo, vis ocurreret forensibus at. Ut placerat definiebas est, vix no sumo epicurei electram, postea regione blandit qui at. Labitur intellegebat voluptatibus ius ea. Ex has purto solum, eum phaedrum efficiantur ut. Et nec facer soluta cetero, ad integre rationibus est.
 
 
 %% Section 3
 \section{Analisis Tekstur dengan Metode Local Binary Pattern}
 \label{lbp}
 
-Local Binary Pattern (LBP) merupakan salah satu teknik analisis tekstur pada citra. Metode ini pertama kali diperkenalkan oleh Timo Ojala et.al. \cite{ojala1996comparative}. Metode LBP dapat melakukan proses ekstraksi fitur dengan komputasi yang sederhana dan cepat. Metode LBP juga invarian terhadap transformasi iluminasi \cite{ojala2002multiresolution}. Jika kita mendefinisikan $s(x)$ sebagai fungsi yang hanya melihat tanda bilangan (positif atau negatif):
+Local Binary Pattern (LBP) merupakan salah satu teknik analisis tekstur pada citra. Metode ini pertama kali diperkenalkan oleh Ojala et.al. \cite{ojala1996comparative}. Metode LBP dapat melakukan proses ekstraksi fitur dengan komputasi yang sederhana dan cepat. Metode LBP juga invarian terhadap transformasi iluminasi \cite{ojala2002multiresolution}. Jika kita mendefinisikan $s(x)$ sebagai fungsi yang hanya melihat tanda bilangan (positif atau negatif):
 \begin{equation}
 s(x) = \left\{
 	\begin{array}{l l}
@@ -222,10 +250,11 @@ Koordinat piksel $g_p$ yang tidak tepat pada citra (tidak menghasilkan bilangan 
 \caption{Ilustrasi operasi $LBP_{P,R}$ dengan $P=8$ dan $R=1$}
 \label{fig:lbpillustr}
 \centering
-	\includegraphics[width=4in]{assets/lbpillustr.png}
+	\includegraphics[width=3in]{assets/lbpillustr.png}
+	
 \end{figure}
 
-Seiring berjalannya waktu, metode LBP cukup banyak mendapatkan perhatian dari banyak peneliti di seluruh dunia. Sampai saat ini sudah cukup banyak sekali metode ekstraksi fitur yang dikembangkan berdasarkan teknik LBP. Huang et.al. telah melakukan survey terhadap beberapa modifikasi teknik LBP dalam perjalanannya \cite{huang2011local}. Salah satu yang menarik adalah ekstensi operator LBP ke data 3-dimensi atau dapat juga diartikan sebagai data \textit{spatio-temporal}, antara lain \textit{Volume Local Binary Pattern} (VLBP) dan \textit{Local Binary Pattern Three Orthogonal Plane} (LBP-TOP).
+Seiring berjalannya waktu, metode LBP cukup banyak mendapatkan perhatian dari banyak peneliti di seluruh dunia. Sampai saat ini sudah cukup banyak sekali metode ekstraksi fitur yang dikembangkan berdasarkan teknik LBP. Huang et.al. telah melakukan survei terhadap beberapa modifikasi teknik LBP dalam perjalanannya \cite{huang2011local}. Salah satu yang menarik adalah ekstensi operator LBP ke data 3-dimensi atau dapat juga diartikan sebagai data \textit{spatio-temporal}, antara lain \textit{Volume Local Binary Pattern} (VLBP) dan \textit{Local Binary Pattern Three Orthogonal Plane} (LBP-TOP).
 
 \subsection{Volume Local Binary Pattern (VLBP)}
 \label{vlbp}
@@ -247,7 +276,8 @@ dimana $g_{t_c-L,c}$ merupakan nilai keabu-abuan piksel pusat pada $L$ \textit{f
 \caption{Ilustrasi operasi \textit{Volume Local Binary Pattern} (VLBP)}
 \label{fig:vlbpillustr}
 \centering
-	\includegraphics[width=5.5in]{assets/vlbpillustr.png}
+	\includegraphics[height=3in]{assets/vlbpillustr.png}
+	
 \end{figure}
 
 \subsection{Local Binary Pattern Three Orthogonal Plane (LBP-TOP)}
@@ -259,14 +289,31 @@ Setelah kita mengetahui operator VLBP, kita dapat melihat bahwa semakin besar ni
 \label{fig:top}
 \centering
 	\includegraphics[width=4in]{assets/top.png}
+	
 \end{figure}
 
 Dari Gambar \ref{fig:top} dapat dilihat bahwa untuk menerapkan operator LBP-TOP, dilakukan proses $LBP_{P,R}$ untuk setiap bidang (XY, YT, dan XT) pada video. Karena kita melakukan operasi LBP pada 3 bidang, hal ini berimplikasi pada banyaknya jumlah piksel yang dihitung dan mengakibatkan waktu komputasi yang lebih banyak jika dibandingkan dengan operator VLBP.
 
 
 %% Section 4
-\section{Extreme Learning Machine}
-Ex corpora platonem omittantur duo, pri semper efficiantur an. Adipisci constituam eam cu, graece legendos nominati ad sed, pri ea suas delicata. Purto oratio in quo, vis ocurreret forensibus at. Ut placerat definiebas est, vix no sumo epicurei electram, postea regione blandit qui at. Labitur intellegebat voluptatibus ius ea. Ex has purto solum, eum phaedrum efficiantur ut. Et nec facer soluta cetero, ad integre rationibus est.
+\section{Random Forest}
+\label{randforest}
+
+\textit{Random forest} merupakan sebuah algoritma klasifikasi yang pertama kali diperkenalkan oleh Breiman \cite{breiman2001random}. Algoritma ini merupakan bagian dari sistem \textit{ensemble learning} dengan \textit{weak learner}-nya berupa \textit{decision tree}. Istilah "\textit{forest}" diturunkan dari kenyataan bahwa algoritma \textit{random forest} ini terdiri dari sekumpulan \textit{decision tree} yang saling independen untuk melakukan klasifikasi data. Istilah "\textit{random}" ini juga diturunkan dari kenyataan bahwa dalam membangun masing-masing \textit{decision tree}, setiap \textit{node} pada \textit{tree} merupakan fitur pada data yang dipilih secara acak. Berikut ini merupakan langkah-langkah konstruksi setiap \textit{decision tree} dalam \textit{random forest} \cite{breimanonline}:
+
+\begin{enumerate}
+\item jumlah sampel pada data latihan adalah $N$ dan jumlah fitur atau atribut tiap sampel adalah $M$.
+\item Dari data latihan, ambil sejumlah $N$ sampel secara acak dengan pengembalian (prinsip \textit{bootstrap agregating}). Sampel ini dijadikan data untuk membangun \textit{tree}.
+\item Pada setiap proses pembentukan \textit{node} dalam \textit{tree}, pilih sejumlah $m$ ($m$ selalu konstan) dari total $M$ atribut ($m << M$) secara acak. Dari $m$ atribut yang terpilih, tentukan atribut yang menghasilkan \textit{split} terbaik berdasarkan suatu fungsi objektif.
+
+\end{enumerate}
+
+Algoritma klasifikasi \textit{random forest} memiliki beberapa keunggulan, antara lain \cite{breimanonline}: komputasinya yang cepat, performa klasifikasi yang baik, mampu melakukan klasifikasi untuk dataset yang memiliki dimensi fitur tinggi,
+dan dapat memberikan informasi mengenai fitur yang cukup penting. Oleh karena itulah, dalam makalah ini, algoritma klasifikasi \textit{random forest} digunakan.
+
+%Ex corpora platonem omittantur duo, pri semper efficiantur an. Adipisci constituam eam cu, graece legendos nominati ad sed, pri ea suas delicata. Purto oratio in quo, vis ocurreret forensibus at. Ut placerat definiebas est, vix no sumo epicurei electram, postea regione blandit qui at. Labitur intellegebat voluptatibus ius ea. Ex has purto solum, eum phaedrum efficiantur ut. Et nec facer soluta cetero, ad integre rationibus est.
+
+%Minim dolorem convenire sit ne, veniam everti labores mel ut, vim aperiam laboramus id. Lorem tractatos sed ea. Mucius verterem te qui, sed malorum maiestatis dissentias ei. Probo paulo doming ne vix, ius oratio sententiae in. In quem vero velit vis, mea accusata scribentur vituperatoribus ei. Aperiam mnesarchum nec at, vel ea aliquip ornatus. Mea efficiendi definitionem et, tritani erroribus sit et.
 
 
 %% Section 5
@@ -280,84 +327,315 @@ Secara garis besar, sistem pengenalan ekspresi wajah yang dikembangkan dapat dib
 \label{fig:systemov}
 \centering
 	\includegraphics[width=6.3in]{assets/systemov.png}
+	
 \end{figure}
 
 \subsection{Image Dataset}
 \label{imagedataset}
 
-Untuk melakukan proses \textit{training} dan \textit{testing} sistem, dataset \textit{extended} Cohn-Kanade (CK+) digunakan \cite{lucey2010extended}. Dataset ini merupakan perbaikan dari dataset Cohn-Kanade (CK) yang telah dipublikasikan pada tahun 2000. Dataset Cohn-Kanade telah banyak digunakan oleh peneliti untuk melakukan pengembangan dan evaluasi algoritma pengenalan ekspresi wajah individual. Pada dataset CK+, terdapat total 593 rentetan gambar pose wajah dari 123 narasumber dengan umur berkisar antara 18 hingga 50 tahun. Komposisi narasumber adalah 69\% wanita, 81\% Euro-American, 13\% Afro-American, dan 6\% grup lainnya. Jumlah rentetan gambar bervariasi mulai dari 10 hingga 60 \textit{frame} dan kesemuanya selalu diawali oleh ekspresi netral hingga pada akhirnya informasi puncak ekspresi wajah. Keseluruhan tipe warna rentetan gambar adalah 8-bit \textit{gray-scale} dan 24-bit warna dengan ukuran 640x490 atau 640x480 piksel. Gambar \ref{fig:ckplusexampl} menunjukkan contoh beberapa sampel rentetan gambar yang diambil dari dataset CK+.
+Untuk melakukan proses \textit{training} dan \textit{testing} sistem, dataset \textit{extended} Cohn-Kanade (CK+) digunakan \cite{lucey2010extended}. Dataset ini merupakan perbaikan dari dataset Cohn-Kanade (CK) yang telah dipublikasikan pada tahun 2000. Dataset Cohn-Kanade telah banyak digunakan oleh peneliti untuk melakukan pengembangan dan evaluasi algoritma pengenalan ekspresi wajah individual. Pada dataset CK+, terdapat total 593 rentetan gambar pose wajah dari 123 narasumber dengan umur berkisar antara 18 hingga 50 tahun. Komposisi narasumber adalah 69\% wanita, 81\% Euro-American, 13\% Afro-American, dan 6\% grup lainnya. Jumlah rentetan gambar bervariasi mulai dari 10 hingga 60 \textit{\textit{frame}} dan kesemuanya selalu diawali oleh ekspresi netral hingga pada akhirnya informasi puncak ekspresi wajah. Keseluruhan tipe warna rentetan gambar adalah 8-bit \textit{gray-scale} dan 24-bit warna dengan ukuran 640x490 atau 640x480 piksel. Gambar \ref{fig:ckplusexampl} menunjukkan contoh beberapa sampel rentetan gambar yang diambil dari dataset CK+.
 
 \begin{figure}[b!]
-\caption{Contoh dataset extended Cohn-Kanade}
+\caption{Contoh dataset \textit{extended} Cohn-Kanade}
 \label{fig:ckplusexampl}
 \centering
 	\includegraphics[width=6.2in]{assets/ckplusexampl.png}
+	
 \end{figure}
 
-Dataset CK+ juga sudah memiliki \textit{ground truth} yang lebih baik untuk pengenalan jenis ekspresi berdasarkan 7 kelas ekspresi wajah universal. Dalam dataset distribusinya, struktur direktori dan \textit{file} setiap gambar memiliki konvensi tertentu. Sebagai contoh, sebuah file gambar dengan alamat \texttt{cohn-kanade-images/S005/001/S005\_001\_011.png} memiliki asosiasi dengan file jenis ekspresi pada \texttt{Emotion/S005/001/S005\_001\_011\_emotion.txt}. File jenis ekspresi memiliki variasi nilai mulai dari 0 sampai 7 (0=netral, 1=\textit{anger}, 2=\textit{contempt}, 3=\textit{disgust}, 4=\textit{fear}, 5=\textit{happy}, 6=\textit{sadness}, 7=\textit{surprise}). Dari total 593 rentetan gambar, 327 diantaranya memiliki \textit{ground truth} untuk jenis ekpresi wajah.
+Dataset CK+ juga sudah memiliki \textit{ground truth} yang lebih baik untuk pengenalan jenis ekspresi berdasarkan 7 kelas ekspresi wajah universal. Dalam dataset distribusinya, struktur direktori dan \textit{file} setiap gambar memiliki konvensi tertentu. Sebagai contoh, sebuah file gambar dengan alamat \texttt{cohn-kanade-images/S005/001/S005\_001\_011.png} memiliki asosiasi dengan file jenis ekspresi pada \texttt{Emotion/S005/001/S005\_001\_011\_emotion.txt}. File jenis ekspresi memiliki variasi nilai mulai dari 0 sampai 7 (0=netral, 1=\textit{anger}, 2=\textit{contempt}, 3=\textit{disgust}, 4=\textit{fear}, 5=\textit{happy}, 6=\textit{sadness}, 7=\textit{surprise}). Dari total 593 rentetan gambar, 327 diantaranya memiliki \textit{ground truth} untuk jenis ekpresi wajah. Total 327 data inilah yang kemudian akan dijadikan data dalam eksperimen yang dilakukan.
 
-\begin{enumerate}
-\item Exerci reformidans nam no, has et error impedit omittantur
-\item Ei hinc senserit qui. Ea qui duis justo primis, vide consul eam id, odio justo detraxit no eos
-\end{enumerate}
+%\begin{enumerate}
+%\item Exerci reformidans nam no, has et error impedit omittantur
+%\item Ei hinc senserit qui. Ea qui duis justo primis, vide consul eam id, odio justo detraxit no eos
+%\end{enumerate}
 
-Exerci reformidans nam no, has et error impedit omittantur. Ei hinc senserit qui. Ea qui duis justo primis, vide consul eam id, odio justo detraxit no eos. Fastidii gloriatur vis id. Pri noster reprimique vituperatoribus ea, vis ut altera gloriatur. Viderer omittam indoctum in pro.
+%Exerci reformidans nam no, has et error impedit omittantur. Ei hinc senserit qui. Ea qui duis justo primis, vide consul eam id, odio justo detraxit no eos. Fastidii gloriatur vis id. Pri noster reprimique vituperatoribus ea, vis ut altera gloriatur. Viderer omittam indoctum in pro.
 
-\subsection{Preprocessing}
-\label{preprocessing}
+\subsection{Preprocessing dan Feature Extraction}
+\label{preprocessing-featextract}
 
-Maiorum tractatos argumentum ne per, sumo ludus maluisset eu eum, mea an periculis contentiones. Partiendo salutandi eloquentiam ad cum, ea munere populo eam, justo laudem at vel. Labore quidam tractatos ius ad, eu mel consul possit, pro ex diam elit viderer. Cu saperet officiis per, te alia labore rationibus vel, cu qui idque vocent nonumes. Pro admodum accommodare definitiones ex. Labitur dissentiunt ea mel.
+Tahap \textit{preprocessing} akan dilakukan untuk setiap citra pada dataset CK+ sebelum dilakukan proses ekstraksi fitur. Pada tahap \textit{preprocessing}, setiap citra akan diterapkan proses deteksi wajah dengan menggunakan fungsi deteksi wajah yang ada pada \textit{computer vision toolbox} aplikasi MATLAB 2013a. Segmen wajah yang terdeteksi ini kemudian akan digunakan dalam proses ekstraksi fitur. Hasil deteksi wajah memiliki kemungkinan untuk mendapatkan beberapa kandidat segmen wajah. Karena pada dataset CK+ hanya ada satu individu yang berada di depan kamera, jika ada dua atau lebih kandidat segmen wajah terdeteksi, maka ukuran segmen yang melebihi nilai \textit{threshold} akan dicari secara \textit{greedy}. Dalam eksperimen yang dilakukan, nilai \textit{threshold} adalah 120. Nilai \textit{threshold} ini menyatakan bahwa, ukuran minimum segmen wajah adalah $120 \times 120$ piksel. Jika tidak ada yang memenuhi, maka segmen kandidat wajah yang pertama kali ditemukan akan dijadikan segmen wajah untuk dilakukan proses ekstraksi fitur. Hal yang menarik juga ditemukan pada hasil segmentasi wajah, dimana ukuran segmen ternyata selalu lebih besar dari ukuran wajah individu. Agar segmentasi lebih fokus ke bagian wajah saja, dilakukan juga proses \textit{resize} terhadap ukuran segmen sehingga ukurannya lebih kecil dan pas pada bagian wajah saja. 
+
+Proses ekstraksi fitur dilakukan pada setiap citra hasil dari tahap \textit{preprocessing}. Dalam eksperimen yang dilakukan, metode ekstraksi fitur VLBP dan LBP-TOP diterapkan pada citra segmentasi wajah. Histogram VLBP dan LBP-TOP untuk setiap citra merupakan fitur yang nantinya akan dimasukkan sebagai masukan proses klasifikasi. Algoritma \ref{alg:test} merupakan \textit{pseudocode} dari proses \textit{preprocessing} dan \textit{feature extraction}. 
 
 \begin{algorithm}[hbt!]
+\begin{spacing}{1}
 \begin{algorithmic}[1]
-\REQUIRE{Face Expression Image}
-\ENSURE{Fitur LBP-TOP}
-\STATE Detect Face
-\IF{Face detected = 1} 
-	\STATE Create Bounding Box 
+\STATE $F$ = detect the face
+\IF{size($F$) = 0} %\COMMENT{ size of face candidates}
+	\STATE skip this image
 \ELSE 
-	\STATE Do something... 
+	\STATE $S$ = $F[1]$
+	\IF{size($F$) $>$ 1}
+		\STATE $i$ = 2
+		\WHILE{$F[i]$ $>$ threshold}
+			\STATE $S$ = $F[i]$
+			\STATE $i = i+1$
+		\ENDWHILE
+	\ENDIF
+	\STATE resize $S$ using some constant $k$ ($k \leq 1$)
+	\STATE do LBP-TOP or VLBP feature extraction on $S$
 \ENDIF
 \end{algorithmic}
-\caption{Algoritma \textit{Preprocessing} dan Ekstraksi Fitur}
+\caption{Algoritma \textit{preprocessing} dan \textit{feature extraction}}
 \label{alg:test}
+\end{spacing}
+
 \end{algorithm}
 
-\subsection{Feature Extraction}
+%\subsection{Feature Extraction}
+%\label{featextract}
 
-Legere maiorum referrentur id cum, elit partiendo ex quo. Te erat vivendo maluisset sea. Stet lorem placerat te sea, sale ancillae iracundia te cum, ad impetus hendrerit definiebas nam. Choro consetetur cu mei, ius ad enim eius mentitum, usu illud sanctus in.
+%Legere maiorum referrentur id cum, elit partiendo ex quo. Te erat vivendo maluisset sea. Stet lorem placerat te sea, sale ancillae iracundia te cum, ad impetus hendrerit definiebas nam. Choro consetetur cu mei, ius ad enim eius mentitum, usu illud sanctus in.
 
 \subsection{Classification}
+\label{classification}
 
-Possit admodum adipiscing ut qui, ei erat indoctum theophrastus eos. Ex putant euismod fabellas usu, nusquam volumus euripidis an ius, et aperiam signiferumque vis. Erat forensibus moderatius ne mei, vix an labores definitiones. His esse ullum scribentur ne, sea at meliore inimicus instructior, cum an vidit lucilius. Fierent ponderum mea ex, in wisi vituperatoribus duo.
+Setelah fitur segmen wajah yang berupa histogram VLBP maupun LBP-TOP dihasilkan, kemudian dilakukan proses klasifikasi fitur ini kedalam 7 jenis ekspresi wajah universal. Fitur yang didapatkan dari proses ekstraksi fitur disimpan dalam format CSV. Informasi \textit{gound-truth} ekspresi wajah yang bersesuaian juga disematkan juga dalam berkas CSV ini. Kemudian, aplikasi WEKA (aplikasi \textit{data mining}) digunakan untuk membaca berkas CSV dan dilakukan proses klasifikasi fitur. Seperti yang telah disebutkan pada bab \ref{randforest}, algoritma klasifikasi \textit{random forest} digunakan untuk melakukan proses klasifikasi data hasil ekstraksi fitur.
+
+%Possit admodum adipiscing ut qui, ei erat indoctum theophrastus eos. Ex putant euismod fabellas usu, nusquam volumus euripidis an ius, et aperiam signiferumque vis. Erat forensibus moderatius ne mei, vix an labores definitiones. His esse ullum scribentur ne, sea at meliore inimicus instructior, cum an vidit lucilius. Fierent ponderum mea ex, in wisi vituperatoribus duo.
 
 
 %% Section 6
 \section{Eksperimen dan Analisis}
 \label{experiment}
 
-Minim dolorem convenire sit ne, veniam everti labores mel ut, vim aperiam laboramus id. Lorem tractatos sed ea. Mucius verterem te qui, sed malorum maiestatis dissentias ei. Probo paulo doming ne vix, ius oratio sententiae in. In quem vero velit vis, mea accusata scribentur vituperatoribus ei. Aperiam mnesarchum nec at, vel ea aliquip ornatus. Mea efficiendi definitionem et, tritani erroribus sit et.
+Beberapa skenario eksperimen telah dilakukan. Eksperimen dilakukan dengan menggunakan metode 10-\textit{cross validation}, atau dapat disingkat 10-CV, untuk melakukan verifikasi performa klasifikasi. Setiap hasil eksperimen dengan menggunakan 10-CV kemudian dicatat hasilnya. Metode 10-CV membagi dataset kedalam 10 bagian dengan ukuran yang sama secara acak. Untuk setiap bagian ini, satu bagian akan menjadi data tes, sedangkan 9 bagian lainnya menjadi data latihan. Hal ini dilakukan sebanyak 10 kali hingga semua bagian sudah pernah menjadi data tes dan latihan. Metode 10-\textit{fold cross validation} dapat diilustrasikan seperti pada Gambar \ref{fig:cv}.
 
+\begin{figure}[hbt!]
+\caption{Ilustrasi 10-\textit{fold cross validation}}
+\label{fig:cv}
+\centering
+\includegraphics[width=5in]{assets/10-cv.png}
+
+\end{figure}
+
+Untuk setiap tabel hasil eksperimen yang ada pada makalah ini, dibuat beberapa istilah atau variabel tertentu. Berikut adalah keterangan setiap parameter atau variabel untuk keseluruhan eksperimen yang dilakukan adalah sebagai berikut:
+\begin{enumerate}
+\item $R$, menyatakan radius piksel tetangga pada citra (baik pada X-axis maupun Y-axis) atau bisa dianggap sebagai jari-jari pada lingkaran; $Rx$, menyatakan radius piksel tetangga pada X-axis citra; dan $Ry$, menyatakan radius piksel tetangga pada Y-axis citra.
+\item $P$, menyatakan jumlah tetangga yang dihitung LBP-nya; $Pxy$, menyatakan jumlah tetangga yang dihitung untuk pada XY; $Pxt$, menyatakan jumlah tetangga yang dihitung pada bidang XT; dan $Pyt$, menyatakan jumlah tetangga yang dihitung pada bidang YT.
+\item $L$, menyatakan interval waktu \textit{frame} yang dihitung.
+\item \textbf{Intp}, menyatakan penggunaan metode interpolasi untuk menghitung nilai piksel tetangga; dan \textbf{RInv}, menyatakan penggunaan operasi \textit{rotation-invariant} (tidak terpengaruh rotasi) pada metode VLBP.
+\end{enumerate}
+
+\subsection{Eksperimen: Efek Parameter operator LBP-TOP dan VLBP}
+\label{scenario1}
+
+Skenario eksperimen yang pertama yaitu, menjadikan parameter-parameter operator LBP-TOP dan VLBP sebagai variabel bebas. Parameter tersebut adalah jumlah piksel tetangga ($P$), jarak antara titik pusat dengan piksel tetangga ($R$), dan interval antar \textit{frame} pada video ($L$). Tabel \ref{tab:scenario1} menunjukkan akurasi pengenalan ekspresi wajah untuk skenario eksperimen ini. Parameter yang digunakan pada algoritma \textit{random forest} adalah parameter standar dalam fungsi random forest yaitu: jumlah \textit{decision tree} yang dibuat 10.
+
+%\begin{table}[htbp]
+%  \caption{Hasil klasifikasi untuk variasi parameter operator (a) LBP-TOP dan (b) VLBP}
+%  \label{tab:scenario1}	
+%  \begin{subfigure}{1.0\textwidth}
+%  \centering
+%  %\caption{Hasil klasifikasi untuk variasi parameter $P$, $L$, dan $R$ operator LBP-TOP}
+%  \caption{}
+%  \label{tab:scenario1a}%
+%  \begin{tabular}{C{0.7cm}C{0.7cm}C{0.7cm}C{0.7cm}C{0.7cm}C{0.7cm}cr}
+%    \toprule
+%    \multicolumn{7}{c}{Parameter LBP-TOP} & \multicolumn{1}{c}{\multirow{2}[5]{*}{Akurasi}} \\
+%    \cmidrule{1-7}
+%    \multicolumn{1}{c}{$Rx$} & \multicolumn{1}{c}{$Ry$} & \multicolumn{1}{c}{$L$} & \multicolumn{1}{c}{$Pxy$} & \multicolumn{1}{c}{$Pxt$} & \multicolumn{1}{c}{$Pyt$} & \multicolumn{1}{c}{inter} & \multicolumn{1}{c}{} \\
+%    \midrule
+%    1     & 1     & 1     & 4     & 4     & 4     & yes   & 48,62\% \\
+%    1     & 1     & 1     & 4     & 4     & 4     & no    & 48,62\% \\
+%    1     & 1     & 1     & 8     & 8     & 8     & yes   & 44,65\% \\
+%    1     & 1     & 1     & 8     & 8     & 8     & no    & 49,54\% \\
+%    1     & 1     & 2     & 8     & 8     & 8     & yes   & 46,48\% \\
+%    1     & 1     & 2     & 8     & 8     & 8     & no    & 50,15\% \\
+%    1     & 2     & 1     & 8     & 8     & 8     & yes   & 49,23\% \\
+%    1     & 2     & 1     & 8     & 8     & 8     & no    & 45,56\% \\
+%    2     & 1     & 1     & 8     & 8     & 8     & yes   & 45,56\% \\
+%    2     & 1     & 1     & 8     & 8     & 8     & no    & 44,65\% \\
+%    2     & 2     & 1     & 8     & 8     & 8     & yes   & 48,01\% \\
+%    2     & 2     & 1     & 8     & 8     & 8     & no    & 48,93\% \\
+%    2     & 2     & 2     & 4     & 4     & 4     & yes   & 45,87\% \\
+%    2     & 2     & 2     & 4     & 4     & 4     & no    & 45,87\% \\
+%    2     & 2     & 2     & 8     & 8     & 8     & yes   & 52,29\% \\
+%    2     & 2     & 2     & 8     & 8     & 8     & no    & 49,23\% \\
+%    \bottomrule
+%    \end{tabular}%
+%    \end{subfigure} \\ \\
+%    
+%    \begin{subfigure}{1.0\textwidth}
+%    \centering
+%    %\caption{Hasil klasifikasi untuk variasi parameter $P$, $L$, dan $R$ operator LBP-TOP}
+%    \caption{}
+%    \label{tab:scenario1b}%
+%    \begin{tabular}{C{0.7cm}C{0.7cm}C{0.7cm}cr}
+%        \toprule
+%        \multicolumn{4}{c}{Parameter VLBP} & \multicolumn{1}{c}{\multirow{2}[0]{*}{Akurasi}} \\
+%        \cmidrule{1-4}
+%        \multicolumn{1}{c}{$R$} & \multicolumn{1}{c}{$P$} & \multicolumn{1}{c}{$L$} & \multicolumn{1}{c}{Rinv} & \multicolumn{1}{c}{} \\
+%        \midrule
+%        1     & 2     & 1     & no    & 35,78\% \\
+%        1     & 4     & 1     & no    & 42,81\% \\
+%        2     & 4     & 1     & no    & 46,48\% \\
+%        1     & 2     & 1     & yes   & 38,22\% \\
+%        1     & 4     & 1     & yes   & 43,12\% \\
+%        2     & 4     & 1     & yes   & 41,90\% \\
+%        \bottomrule
+%        \end{tabular}%
+%    \end{subfigure}
+%\end{table}%
+
+% Table generated by Excel2LaTeX from sheet 'Scenario 1'
 \begin{table}[htbp]
   \centering
-  \caption{Experimental conditions}
-  \label{tab:expcond}
-  \begin{tabular}{ccc}
-    \hline
-    1 & 2 & 3 \\
-    \hline
-    4 & 5 & 6 \\
-    7 & 8 & 9 \\
-    1 & 2 & 3
-\end{tabular}
-\end{table}
+  \caption{Hasil klasifikasi untuk variasi parameter operator LBP-TOP (kiri) dan VLBP (kanan)}
+  \label{tab:scenario1}
+    \begin{tabular}{C{0.7cm}C{0.7cm}C{0.7cm}C{0.7cm}C{0.7cm}C{0.7cm}C{0.7cm}rC{0.7cm}C{0.7cm}C{0.7cm}C{0.7cm}r}
+    \toprule
+    \multicolumn{7}{c}{Parameter LBP-TOP}                 & \multicolumn{1}{c}{\multirow{2}[0]{*}{Akurasi}} & \multicolumn{4}{c}{Parameter VLBP} & \multicolumn{1}{c}{\multirow{2}[0]{*}{Akurasi}} \\
+    \cmidrule{1-7} \cmidrule{9-12}
+    \multicolumn{1}{c}{$Rx$} & \multicolumn{1}{c}{$Ry$} & \multicolumn{1}{c}{$L$} & \multicolumn{1}{c}{$Pxy$} & \multicolumn{1}{c}{$Pxt$} & \multicolumn{1}{c}{$Pyt$} & \multicolumn{1}{c}{Intp} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{$R$} & \multicolumn{1}{c}{$P$} & \multicolumn{1}{c}{$L$} & \multicolumn{1}{c}{Rinv} & \multicolumn{1}{c}{} \\
+    \midrule
+    1     & 1     & 1     & 4     & 4     & 4     & yes   & 48,62\% &        	1     & 2     & 1     & no    & 35,78\% \\
+    1     & 1     & 1     & 4     & 4     & 4     & no    & 48,62\% &       	 1     & 4     & 1     & no    & 42,81\% \\
+    1     & 1     & 1     & 8     & 8     & 8     & yes   & 44,65\% &       	 2     & 4     & 1     & no    & 46,48\% \\
+    1     & 1     & 1     & 8     & 8     & 8     & no    & 49,54\% &       	 1     & 2     & 1     & yes   & 38,22\% \\
+    1     & 1     & 2     & 8     & 8     & 8     & yes   & 46,48\% &       	 1     & 4     & 1     & yes   & 43,12\% \\
+    1     & 1     & 2     & 8     & 8     & 8     & no    & 50,15\% &       	 2     & 4     & 1     & yes   & 41,90\% \\
+    1     & 2     & 1     & 8     & 8     & 8     & yes   & 49,23\% &              &       &       &       &  \\
+    1     & 2     & 1     & 8     & 8     & 8     & no    & 45,56\% &       &       &       &       &  \\
+    2     & 1     & 1     & 8     & 8     & 8     & yes   & 45,56\% &              &       &       &       &  \\
+    2     & 1     & 1     & 8     & 8     & 8     & no    & 44,65\% &              &       &       &       &  \\
+    2     & 2     & 1     & 8     & 8     & 8     & yes   & 48,01\% &              &       &       &       &  \\
+    2     & 2     & 1     & 8     & 8     & 8     & no    & 48,93\% &              &       &       &       &  \\
+    2     & 2     & 2     & 4     & 4     & 4     & yes   & 45,87\% &              &       &       &       &  \\
+    2     & 2     & 2     & 4     & 4     & 4     & no    & 45,87\% &              &       &       &       &  \\
+    2     & 2     & 2     & 8     & 8     & 8     & yes   & 52,29\% &              &       &       &       &  \\
+    2     & 2     & 2     & 8     & 8     & 8     & no    & 49,23\% &              &       &       &       &  \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
+Dari Tabel \ref{tab:scenario1} kita dapat melihat bahwa secara umum, akurasi hasil klasifikasi dengan menggunakan LBP-TOP lebih baik jika dibandingkan dengan VLBP. Eksperimen untuk metode VLBP dengan menggunakan 8-tetangga tidak dilakukan karena pemakaian memori komputasinya sangat besar. Variasi beberapa parameter juga tidak terlihat perbedaan yang cukup besar pada masing-masing metode. Namun dari sini kita dapat melihat bahwa penggunaan parameter $P$ untuk 4-tetangga memiliki akurasi klasifikasi yang tidak kalah jauh jika dibandingkan dengan penggunaan parameter $P$ untuk 8-tetangga. Penggunaan parameter $P$ untuk 4-tetangga dapat dipertimbangkan pemakaiannya untuk komputasi yang lebih cepat, mengingat jumlah fitur yang dihasilkannya tidak sebanyak $P$ untuk 8-tetangga.
+
+\subsection{Eksperimen: Imbalance Dataset}
+\label{scenario2}
+
+Dengan mempertimbangkan hasil klasifikasi yang kurang memuaskan pada eksperimen sebelumnya, identifikasi mengenai penyebab performa klasifikasi menurun dilakukan. Didapatkan fakta bahwa adanya ketidaksetaraan antara kelas-kelas emosi (label) yang ada pada dataset CK+. Untuk gambaran yang lebih jelas, ketidaksetaraan jumlah data antar kelas pada dataset ditunjukkan pada Gambar \ref{fig:imbalancedata}.
+
+\begin{figure}[hbt!]
+\caption{(a) Grafik jumlah sampel untuk tiap label pada dataset CK+ sebelum \textit{resampling} (b) Grafik jumlah sampel untuk tiap label pada dataset CK+ setelah \textit{resampling}}
+\centering
+	\begin{subfigure}{0.45\textwidth}
+	%\caption{Grafik jumlah sampel untuk tiap label pada dataset CK+ sebelum \textit{resampling}}
+	\caption{}
+	\label{fig:imbalancedata}
+	\includegraphics[width=2.9in,height=1.5in]{assets/imbalancedata.png}
+	\end{subfigure} \qquad	
+	\begin{subfigure}{0.45\textwidth}
+	%\caption{Grafik jumlah sampel untuk tiap label pada dataset CK+ setelah resampling}
+	\caption{}
+	\label{fig:resampleddata}
+	\includegraphics[width=2.9in,height=1.5in]{assets/resampledata.png}
+	\end{subfigure} \qquad
+\end{figure}
+
+Masalah yang dihadapi pada eksperimen ini sering disebut dengan \textit{imbalanced data}. Masalah ini cukup umum terjadi dalam dunia nyata, yaitu tidak tersedianya jumlah data latihan yang seimbang untuk masing-masing label. WEKA, sebagai alat bantu dalam melakukan proses klasifikasi memiliki fitur untuk mengatasi masalah ketidaksetaraan jumlah data. Salah satunya dengan menggunakan teknik \textit{resampling}. Teknik \textit{resampling} merupakan sebuah teknik sederhana dalam mengatasi masalah \textit{imbalance data}. Teknik \textit{resampling} melakukan proses transformasi data yang ada dengan memanfaatkan data itu sendiri, baik itu dengan melakukan duplikasi maupun pengurangan beberapa data yang dipilih secara acak. Dalam skenario eksperimen yang kedua, diterapkan operasi \textit{resampling} pada dataset. Operasi resampling yang dilakukan adalah membuat distribusi jumlah data untuk masing-masing label seimbang, dengan cara mengganti parameter \texttt{biasToUniformClass} menjadi \texttt{1}. Gambar \ref{fig:resampleddata} menunjukkan hasil penerapan metode \textit{resampling} pada dataset CK+ yang digunakan.
+
+Beberapa eksperimen seperti pada skenario pertama dilakukan untuk data hasil \textit{resampling} ini. Hasilnya dimuat pada Tabel \ref{tab:scenario2}. Dapat dilihat bahwa, dengan menggunakan dataset yang jumlah data masing-masing labelnya seimbang, akurasi klasifikasi meningkat untuk keseluruhan metode ekstraksi fitur (LBP-TOP dan juga VLBP). Namun, hasil yang cukup baik didapatkan dengan menggunakan metode VLBP, dimana hasil akurasinya juga tidak kalah dengan metode LBP-TOP yaitu mencapai 76,15\%. Pemilihan variasi parameter juga memberikan perbedaan akurasi yang cukup besar disini. Tabel \ref{tab:confusion2} merupakan contoh \textit{confusion matrix} untuk operator LBP-TOP dengan akurasi tertinggi ($Rx$ = 2, $Ry$ = 2, $L$ = 1, $Pxy$ = 8, $Pxt$ = 8, $Pyt$ = 8, dan dengan interpolasi), yang dapat digunakan untuk melihat akurasi hasil klasifikasi masing-masing kelas emosi.
+
+%\begin{table}[htbp]
+%  \centering
+%  \caption{Hasil klasifikasi untuk variasi parameter $P$, $L$, dan $R$ operator VLBP dan LBP-TOP untuk dataset yang sudah di-\textit{resampling}}
+%  \label{tab:scenario2}
+%  \begin{tabular}{rrrrrrcr}
+%      \toprule
+%      \multicolumn{7}{c}{Parameter LBP-TOP} & \multicolumn{1}{c}{\multirow{2}[5]{*}{Akurasi}} \\
+%      \cmidrule{1-7}
+%      \multicolumn{1}{p{2em}}{$Rx$} & \multicolumn{1}{p{2em}}{$Ry$} & \multicolumn{1}{p{2em}}{$L$} & \multicolumn{1}{p{2em}}{$Pxy$} & \multicolumn{1}{p{2em}}{$Pxt$} & \multicolumn{1}{p{2em}}{$Pyt$} & \multicolumn{1}{l}{Bilinear} & \\
+%      \midrule
+%      1     & 1     & 1     & 4     & 4     & 4     & yes   & 73,09\% \\
+%      1     & 1     & 1     & 4     & 4     & 4     & no    & 73,09\% \\
+%      1     & 1     & 1     & 8     & 8     & 8     & yes   & 73,70\% \\
+%      1     & 1     & 1     & 8     & 8     & 8     & no    & 71,56\% \\
+%      1     & 1     & 2     & 8     & 8     & 8     & yes   & 73,09\% \\
+%      1     & 1     & 2     & 8     & 8     & 8     & no    & 72,17\% \\
+%      1     & 2     & 1     & 8     & 8     & 8     & yes   & 73,70\% \\
+%      1     & 2     & 1     & 8     & 8     & 8     & no    & 72,17\% \\
+%      2     & 1     & 1     & 8     & 8     & 8     & yes   & 70,95\% \\
+%      2     & 1     & 1     & 8     & 8     & 8     & no    & 72,48\% \\
+%      2     & 2     & 1     & 8     & 8     & 8     & yes   & 76,15\% \\
+%      2     & 2     & 1     & 8     & 8     & 8     & no    & 73,39\% \\
+%      2     & 2     & 2     & 4     & 4     & 4     & yes   & 71,86\% \\
+%      2     & 2     & 2     & 4     & 4     & 4     & no    & 71,86\% \\
+%      2     & 2     & 2     & 8     & 8     & 8     & yes   & 74,92\% \\
+%      2     & 2     & 2     & 8     & 8     & 8     & no    & 73,39\% \\
+%      \bottomrule
+%      \end{tabular}%
+%
+%\end{table}
+
+% Table generated by Excel2LaTeX from sheet 'Scenario 2'
+\begin{table}[htbp!]
+  \centering
+  \caption{Hasil klasifikasi pada dataset C+ yang telah di-\textit{resampling} untuk variasi parameter operator LBP-TOP (kiri) dan VLBP (kanan)}
+  \label{tab:scenario2}%
+    \begin{tabular}{C{0.7cm}C{0.7cm}C{0.7cm}C{0.7cm}C{0.7cm}C{0.7cm}C{0.7cm}rC{0.7cm}C{0.7cm}C{0.7cm}C{0.7cm}r}
+    \toprule
+    \multicolumn{7}{c}{Parameter LBP-TOP}                 & \multicolumn{1}{c}{\multirow{2}[0]{*}{Akurasi}} & \multicolumn{4}{c}{Parameter VLBP} & \multicolumn{1}{c}{\multirow{2}[0]{*}{Akurasi}} \\
+    \cmidrule{1-7} \cmidrule{9-12}
+    \multicolumn{1}{c}{$Rx$} & \multicolumn{1}{c}{$Ry$} & \multicolumn{1}{c}{$L$} & \multicolumn{1}{c}{$Pxy$} & \multicolumn{1}{c}{$Pxt$} & \multicolumn{1}{c}{$Pyt$} & \multicolumn{1}{c}{Intp} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{$R$} & \multicolumn{1}{c}{$P$} & \multicolumn{1}{c}{$L$} & \multicolumn{1}{c}{Rinv} & \multicolumn{1}{c}{} \\
+    \midrule
+    1     & 1     & 1     & 4     & 4     & 4     & yes   & 73,09\% & 1     & 2     & 1     & no    & 70,64\% \\
+    1     & 1     & 1     & 4     & 4     & 4     & no    & 73,09\% & 1     & 4     & 1     & no    & 72,17\% \\
+    1     & 1     & 1     & 8     & 8     & 8     & yes   & 73,70\% & 2     & 4     & 1     & no    & 75,23\% \\
+    1     & 1     & 1     & 8     & 8     & 8     & no    & 71,56\% & 1     & 2     & 1     & yes   & 69,42\% \\
+    1     & 1     & 2     & 8     & 8     & 8     & yes   & 73,09\% & 1     & 4     & 1     & yes   & 76,15\% \\
+    1     & 1     & 2     & 8     & 8     & 8     & no    & 72,17\% & 2     & 4     & 1     & yes   & 73,09\% \\
+    1     & 2     & 1     & 8     & 8     & 8     & yes   & 73,70\% &       &       &       &       &  \\
+    1     & 2     & 1     & 8     & 8     & 8     & no    & 72,17\% &       &       &       &       &  \\
+    2     & 1     & 1     & 8     & 8     & 8     & yes   & 70,95\% &       &       &       &       &  \\
+    2     & 1     & 1     & 8     & 8     & 8     & no    & 72,48\% &       &       &       &       &  \\
+    2     & 2     & 1     & 8     & 8     & 8     & yes   & 76,15\% &       &       &       &       &  \\
+    2     & 2     & 1     & 8     & 8     & 8     & no    & 73,39\% &       &       &       &       &  \\
+    2     & 2     & 2     & 4     & 4     & 4     & yes   & 71,86\% &       &       &       &       &  \\
+    2     & 2     & 2     & 4     & 4     & 4     & no    & 71,86\% &       &       &       &       &  \\
+    2     & 2     & 2     & 8     & 8     & 8     & yes   & 74,92\% &       &       &       &       &  \\
+    2     & 2     & 2     & 8     & 8     & 8     & no    & 73,39\% &       &       &       &       &  \\
+    \bottomrule
+    \end{tabular}%
+  
+\end{table}%
+
+% Table generated by Excel2LaTeX from sheet 'Scenario 2'
+\begin{table}[htbp]
+  \centering
+  \caption{\textit{Confusion matrix} (dalam satuan persen) untuk hasil klasifikasi LBP-TOP ($Rx$ = 2, $Ry$ = 2, $L$ = 1, $Pxy$ = 8, $Pxt$ = 8, $Pyt$ = 8, dan dengan interpolasi) pada skenario kedua}
+  \label{tab:confusion2}%
+    \begin{tabular}{rrrrrrrl}
+    \toprule
+    \multicolumn{1}{c}{a} & \multicolumn{1}{c}{b} & \multicolumn{1}{c}{c} & \multicolumn{1}{c}{d} & \multicolumn{1}{c}{e} & \multicolumn{1}{c}{f} & \multicolumn{1}{c}{g} & \multicolumn{1}{c}{$\leftarrow$\textit{classified as}} \\
+    \midrule
+    \textbf{80,39 }& 1,96  & 3,92  & 3,92  & 1,96  & 5,88  & 1,96  & a = \textit{anger} \\
+    0     & \textbf{94,12} & 0     & 2,94  & 0     & 2,94  & 0     & b = \textit{contempt} \\
+    5,77  & 1,92  & \textbf{76,92} & 1,92  & 9,62  & 3,85  & 0     & c = \textit{disgust} \\
+    4,55  & 2,27  & 4,55  & \textbf{72,73} & 2,27  & 6,82  & 6,82  & d = \textit{fear} \\
+    8,70  & 0     & 13,04 & 8,70  & \textbf{63,04} & 6,52  & 0     & e = \textit{happy} \\
+    15,38 & 5,77  & 0     & 1,92  & 3,85  & \textbf{73,08} & 0     & f = \textit{sadness} \\
+    4,17  & 0     & 4,17  & 8,33  & 4,17  & 2,08  & \textbf{77,08} & g = \textit{surprise} \\
+    \bottomrule
+    \end{tabular}%
+  
+\end{table}%
 
 
+%Minim dolorem convenire sit ne, veniam everti labores mel ut, vim aperiam laboramus id. Lorem tractatos sed ea. Mucius verterem te qui, sed malorum maiestatis dissentias ei. Probo paulo doming ne vix, ius oratio sententiae in. In quem vero velit vis, mea accusata scribentur vituperatoribus ei. Aperiam mnesarchum nec at, vel ea aliquip ornatus. Mea efficiendi definitionem et, tritani erroribus sit et.
+
+% force new page
+\newpage
 %% Section 7
 \section{Kesimpulan}
 \label{conclusion}
 
-Et vix choro semper. His elit aliquid no. Vix option noluisse ocurreret ei, ad quem nibh alterum mel. Nonumy aliquid copiosae ea per, eruditi repudiare quo at. Atqui adipisci posidonium eu eum.
+Penggunaan LBP-TOP dan VLBP sebagai teknik ekstraksi fitur dan algoritma \textit{random forest} sebagai metode klasifikasi untuk mengenali ekspresi wajah manusia khususnya dalam video pada dataset CK+, memiliki tingkat akurasi yang cukup baik, yaitu diatas 70\% dan yang tertinggi adalah 76,15\%. Hasil ini didapatkan setelah melakukan proses \textit{resampling} distribusi data, sehingga ketidaksetaraan jumlah data tidak terjadi. Dari eksperimen yang dilakukan, pemilihan parameter VLBP dan LBP-TOP tidak terlalu mempengaruhi performa klasifikasi secara umum. Namun, sebaiknya kita perlu memikirkan mengenai waktu komputasi. Semakin besar jumlah tetangga yang dihitung, maka akan semakin besar juga waktu komputasi yang dibutuhkan. Pemilihan 4-tetangga dirasa sudah cukup baik untuk melakukan pengenalan ekspresi wajah.
+
+%Et vix choro semper. His elit aliquid no. Vix option noluisse ocurreret ei, ad quem nibh alterum mel. Nonumy aliquid copiosae ea per, eruditi repudiare quo at. Atqui adipisci posidonium eu eum.
 
 %% The Appendices part is started with the command \appendix;
 %% appendix sections are then done as normal sections
